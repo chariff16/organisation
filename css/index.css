@@ -1,0 +1,23 @@
+.heroSection {
+  width: 100%;
+  height: calc(100vh - 66.5px);
+  background-image: url("https://images.unsplash.com/photo-1609599006353-e629aaabfeae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  padding-right: 10%;
+  color: #f9feff;
+}
+.nav-logo {
+  height: 50px;
+}
+.bars-icon {
+  color: #f9feff;
+  font-size: 1.5rem;
+}
+.dropdown-item:focus,
+.dropdown-item:hover {
+  background-color: #0b5ed7;
+}
