@@ -71,25 +71,25 @@
             </h1>
           </div>
           <div class="modal-body">
-            <form>
+            <form id="login">
               <label for="inputPassword5" class="form-label"
                 >إسم المستخدم</label
               >
               <input
                 type="text"
-                id="inputPassword5"
+                name="username"
                 class="form-control"
                 aria-labelledby="passwordHelpBlock"
               />
               <label for="inputPassword5" class="form-label">كلمة السر</label>
               <input
                 type="password"
-                id="inputPassword5"
+                name="password"
                 class="form-control"
                 aria-labelledby="passwordHelpBlock"
               />
               <div class="modal-footer">
-                <button type="button" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary">
                   تسجيل الدخول
                 </button>
                 <button
@@ -107,6 +107,40 @@
     </div>
 
     <script src="js/bootstrap.bundle.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js">
+      $(document).on('submit', '#login', function (e){
+            e.preventDefault();
+            var formData = new FormData(this);
+            formData.append("login", true);
+            $.ajax({
+                type: "POST",
+                url: "code.php",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log(response);
+                    let res = jQuery.parseJSON(response);
+
+                    if(res.status == 422) {
+                        $('#errorMessage').removeClass('d-none');
+                        $('#errorMessage').text(res.message);
+                    }else if(res.status == 200){
+                        $('#add').modal('hide');
+
+                        $('#addAcount')[0].reset();
+
+                        $('#myTable').load(location.href + " #myTable");
+                        alertify.success(res.message);
+                    }else if(res.status == 500) {
+
+                        alert(res.message);
+                    }
+
+                }
+            });
+        });
+    </script>
+    <script></script>
   </body>
 </html>
