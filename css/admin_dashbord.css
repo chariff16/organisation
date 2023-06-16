@@ -1,3 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900;1000&display=swap");
+:root {
+  --bs-font-sans-serif: "Cairo", sans-serif;
+}
 .nav {
   height: 50px;
 }
@@ -11,4 +15,12 @@
 }
 main {
   width: calc(100% - 300px);
+}
+@media (max-width: 767px) {
+  .aside-bar {
+    width: 0;
+  }
+  main {
+    width: 100%;
+  }
 }
