@@ -41,9 +41,18 @@
           aria-expanded="false"
         ></i>
         <ul class="dropdown-menu w-100 text-center bg-primary">
-          <li><a class="dropdown-item text-light" href="#">Menu item</a></li>
-          <li><a class="dropdown-item text-light" href="#">Menu item</a></li>
-          <li><a class="dropdown-item text-light" href="#">Menu item</a></li>
+          <li><a class="dropdown-item text-light" href="#">الرئسية</a></li>
+          <li><a class="dropdown-item text-light" href="#">من نحن</a></li>
+          <li><a class="dropdown-item text-light" href="#">اتصل بنا</a></li>
+          <li>
+            <a
+              class="dropdown-item text-light"
+              href="#"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              >تسجيل الدخول</a
+            >
+          </li>
         </ul>
       </div>
       <a href="index.html">
@@ -72,26 +81,32 @@
           </div>
           <div class="modal-body">
             <form id="login">
+              <p class="inTro">
+                يرجى أن تدخل إسم المستخدم و كلمة المرور الخاصة بكم
+              </p>
               <label for="inputPassword5" class="form-label"
                 >إسم المستخدم</label
               >
               <input
                 type="text"
                 name="username"
-                class="form-control"
+                class="form-control userName"
                 aria-labelledby="passwordHelpBlock"
               />
               <label for="inputPassword5" class="form-label">كلمة السر</label>
               <input
                 type="password"
                 name="password"
-                class="form-control"
+                class="form-control passWord"
                 aria-labelledby="passwordHelpBlock"
               />
               <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">
-                  تسجيل الدخول
-                </button>
+                <input
+                  type="submit"
+                  name="add"
+                  class="btn btn-primary"
+                  value="تسجيل الدخول"
+                />
                 <button
                   type="button"
                   class="btn btn-secondary"
@@ -107,40 +122,58 @@
     </div>
 
     <script src="js/bootstrap.bundle.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js">
-      $(document).on('submit', '#login', function (e){
-            e.preventDefault();
-            var formData = new FormData(this);
-            formData.append("login", true);
-            $.ajax({
-                type: "POST",
-                url: "code.php",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    console.log(response);
-                    let res = jQuery.parseJSON(response);
-
-                    if(res.status == 422) {
-                        $('#errorMessage').removeClass('d-none');
-                        $('#errorMessage').text(res.message);
-                    }else if(res.status == 200){
-                        $('#add').modal('hide');
-
-                        $('#addAcount')[0].reset();
-
-                        $('#myTable').load(location.href + " #myTable");
-                        alertify.success(res.message);
-                    }else if(res.status == 500) {
-
-                        alert(res.message);
-                    }
-
-                }
-            });
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script>
+      $(document).on("submit", "#login", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("login", true);
+        $.ajax({
+          type: "POST",
+          url: "code.php",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            let res = jQuery.parseJSON(response);
+            if (res.code == 1) {
+              $(".form-control").addClass("border-danger");
+              $(".inTro").addClass("text-danger");
+              $(".inTro").text(res.message);
+            }
+            if (res.code == 2) {
+              $(".userName").addClass("border-danger");
+              $(".inTro").addClass("text-danger");
+              $(".inTro").text(res.message);
+            }
+            if (res.code == 3) {
+              $(".passWord").addClass("border-danger");
+              $(".passWord").val("");
+              $(".inTro").addClass("text-danger");
+              $(".inTro").text(res.message);
+            }
+            if (res.code == 4) {
+              $(".passWord").addClass("border-danger");
+              $(".passWord").val("");
+              $(".inTro").addClass("text-danger");
+              $(".inTro").text(res.message);
+            }
+            if (res.code == 404) {
+              $(".form-control").addClass("border-danger");
+              $(".passWord").val("");
+              $(".userName").val("");
+              $(".inTro").addClass("text-danger");
+              $(".inTro").text(res.message);
+            }
+            if (res.code == 200) {
+              $(".passWord").val("");
+              $(".userName").val("");
+              window.location.replace("admin/dashbord.html");
+            }
+          },
         });
+      });
     </script>
-    <script></script>
   </body>
 </html>

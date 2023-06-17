@@ -4,20 +4,57 @@ if (isset($_POST['login'])) {
     $username = mysqli_real_escape_string($con, $_POST['username']);
     $password = mysqli_real_escape_string($con, $_POST['password']);
     if ($username == NULL || $password == NULL) {
-        $res = [
-            'status' => 422,
-            'message' => 'All fields are mandatory'
-        ];
-        echo json_encode($res);
-        return ;
-    } else if ($password == NULL) {
-        $res = [
-            'status' => 420,
-            'message' => 'Password is mandatory'
-        ];
-        echo json_encode($res);
-        return ;
-    } else {
-        $sql ="";
+        if ($username == NULL && $password == NULL) {
+            $res = [
+                'code' => 1,
+                'message' => 'أدخل إسم المستخدم و كلمة المرور'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+        if ($username == NULL && $password !== NULL) {
+            $res = [
+                'code' => 2,
+                'message' => 'أدخل إسم المستخدم'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+        if ($username !== NULL && $password == NULL) {
+            $res = [
+                'code' => 3,
+                'message' => 'أدخل كلمة المرور'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    }else {
+        $sql = "SELECT * FROM `user` WHERE username = '$username'";
+        $run = mysqli_query($con, $sql);
+        if (mysqli_num_rows($run) > 0 ) {
+            $row = mysqli_fetch_assoc($run);
+            if ($row['password'] == $password) {
+                $res = [
+                    'code' => 200,
+                    'message' => 'كل شيء صحيح'
+                ];
+                echo json_encode($res);
+                return ;
+            }else {
+                $res = [
+                    'code' => 4,
+                    'message' => 'كلمة المرور خاطئة'
+                ];
+                echo json_encode($res);
+                return ;
+            }
+        }else {
+            $res = [
+                'code' => 404,
+                'message' => 'هذا المستخدم غير موجود'
+            ];
+            echo json_encode($res);
+            return ;
+        }
     }
 }
