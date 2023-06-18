@@ -34,6 +34,9 @@ if (isset($_POST['login'])) {
         if (mysqli_num_rows($run) > 0 ) {
             $row = mysqli_fetch_assoc($run);
             if ($row['password'] == $password) {
+                session_start();
+                $_SESSION['id'] = $row['id'];
+                $_SESSION['role'] = $row['role'];
                 $res = [
                     'code' => 200,
                     'message' => 'كل شيء صحيح'
