@@ -33,7 +33,8 @@ if (isset($_POST['login'])) {
         $run = mysqli_query($con, $sql);
         if (mysqli_num_rows($run) > 0 ) {
             $row = mysqli_fetch_assoc($run);
-            if ($row['password'] == $password) {
+            $passwordCheck = password_verify($password, $row['password']);
+            if ($passwordCheck == true ) {
                 session_start();
                 $_SESSION['id'] = $row['id'];
                 $_SESSION['role'] = $row['role'];
