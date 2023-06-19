@@ -11,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/bootstrap.css" />
     <link rel="stylesheet" href="../css/admin_dashbord.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
@@ -157,7 +158,7 @@
           
         </div>
         <div class="mt-4 mx-5">
-          <table class="table table-hover">
+          <table class="table table-hover" id="table">
             <thead>
               <tr>
                 <th scope="col">الإسم</th>
@@ -170,49 +171,49 @@
               </tr>
             </thead>
             <tbody>
+              <?php
+                require("../dbcon.php");
+                $sql = "SELECT * FROM `user` WHERE role = 'admin'";
+                $run = mysqli_query($con, $sql);
+                while($row = mysqli_fetch_assoc($run)){
+              ?>
               <tr>
-                <td class="align-middle">أسامة</td>
-                <td class="align-middle">بن سليمان</td>
-                <td class="align-middle">0600000000</td>
+                <td class="align-middle"><?php echo $row['fname'] ?></td>
+                <td class="align-middle"><?php echo $row['lname'] ?></td>
+                <td class="align-middle"><?php echo $row['phone'] ?></td>
                 <td class="d-md-flex d-sm-inline-block justify-content-around">
                   <button
                     type="button"
-                    class="btn btn-outline-primary btn-sm"
+                    class="btn btn-outline-primary btn-sm editBtn"
                     data-bs-toggle="modal"
                     data-bs-target="#editModal"
+                    value="<?php echo $row['id'] ?>"
                   >
                     <i class="far fa-edit"></i>
                   </button>
                   <button
                     type="button"
-                    class="btn btn-outline-success btn-sm"
+                    class="btn btn-outline-success btn-sm viewBtn"
                     data-bs-toggle="modal"
                     data-bs-target="#viewModal"
+                    value="<?php echo $row['id'] ?>"
                   >
                     <i class="fas fa-eye"></i>
                   </button>
                   <button
                     type="button"
-                    class="btn btn-outline-danger btn-sm"
+                    class="btn btn-outline-danger btn-sm deleteBtn"
                     data-bs-toggle="modal"
                     data-bs-target="#deleteModal"
+                    value="<?php echo $row['id'] ?>"
                   >
                   <i class="fas fa-trash-alt"></i>
                   </button>
                 </td>
               </tr>
-              <tr>
-                <td>محمد شريف</td>
-                <td>بن سليمان</td>
-                <td>0600000000</td>
-                <td>4</td>
-              </tr>
-              <tr>
-                <td>أنفال</td>
-                <td>بن سليمان</td>
-                <td>0600000000</td>
-                <td>3</td>
-              </tr>
+              <?php
+                }
+              ?>
             </tbody>
           </table>
         </div>
@@ -233,7 +234,62 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  هنا يدخل المدير معلومات عضو الذي يريد إضافته
+                  <form id="add">
+                    <p class="inTro">
+                      يرجى أن تدخل معلومات العضو الجديد
+                    </p>
+                    <label for="inputPassword5" class="form-label"
+                      >إسم</label
+                    >
+                    <input
+                      type="text"
+                      name="fname"
+                      class="form-control fName"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label for="inputPassword5" class="form-label"
+                      >اللقب</label
+                    >
+                    <input
+                      type="text"
+                      name="lname"
+                      class="form-control lName"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label for="inputPassword5" class="form-label"
+                      >إسم المستخدم</label
+                    >
+                    <input
+                      type="text"
+                      name="username"
+                      class="form-control userName"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label for="inputPassword5" class="form-label">كلمة المرور</label>
+                    <input
+                      type="password"
+                      name="password"
+                      class="form-control passWord"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label for="inputPassword5" class="form-label"
+                      >الهاتف</label
+                    >
+                    <input
+                      type="text"
+                      name="phone"
+                      class="form-control phOne"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <div class="modal-footer">
+                      <input
+                        type="submit"
+                        name="add"
+                        class="btn btn-primary"
+                        value="إضافة عضو"
+                      />
+                    </div>
+                  </form>
                 </div>
                 <div class="modal-footer">
                   <button
@@ -255,7 +311,7 @@
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">
-                    إضافة عضو
+                    تعديل معلومات عضو
                   </h1>
                   <button
                     type="button"
@@ -265,20 +321,65 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  هنا يدخل المدير معلومات عضو الذي يريد إضافته
+                  <form id="edit">
+                    <p class="inTro">
+                      يرجى أن تدخل معلومات العضو الجديد
+                    </p>
+                    <label for="inputPassword5" class="form-label"
+                      >إسم</label
+                    >
+                    <input
+                      type="text"
+                      name="fname"
+                      class="form-control editFname"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label for="inputPassword5" class="form-label"
+                      >اللقب</label
+                    >
+                    <input
+                      type="text"
+                      name="lname"
+                      class="form-control editLname"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label for="inputPassword5" class="form-label"
+                      >الهاتف</label
+                    >
+                    <input
+                      type="text"
+                      name="phone"
+                      class="form-control editPhone"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label for="inputPassword5" class="form-label"
+                      >إسم المستخدم</label
+                    >
+                    <input
+                      type="text"
+                      name="username"
+                      class="form-control editUserName"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label for="inputPassword5" class="form-label">كلمة المرور</label>
+                    <input
+                      type="password"
+                      name="password"
+                      class="form-control editPassword"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    
+                    <div class="modal-footer">
+                      <input
+                        type="submit"
+                        name="add"
+                        class="btn btn-primary"
+                        value="إضافة عضو"
+                      />
+                    </div>
+                  </form>
                 </div>
-                <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                  >
-                    Close
-                  </button>
-                  <button type="button" class="btn btn-primary">
-                    Save changes
-                  </button>
-                </div>
+                
               </div>
             </div>
           </div>
@@ -287,7 +388,7 @@
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">
-                    إضافة عضو
+                    معاينة عضو
                   </h1>
                   <button
                     type="button"
@@ -297,7 +398,22 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  هنا يدخل المدير معلومات عضو الذي يريد إضافته
+                  <div class="d-flex">
+                    <p class="col">الإسم</p>
+                    <p class="col viewFname">محمد</p>
+                  </div>
+                  <div class="d-flex">
+                    <p class="col">اللقب</p>
+                    <p class="col viewLname">محمد</p>
+                  </div>
+                  <div class="d-flex">
+                    <p class="col">إسم المستخدم</p>
+                    <p class="col viewUserName">محمد</p>
+                  </div>
+                  <div class="d-flex">
+                    <p class="col">الهاتف</p>
+                    <p class="col viewPhone">محمد</p>
+                  </div>
                 </div>
                 <div class="modal-footer">
                   <button
@@ -305,10 +421,7 @@
                     class="btn btn-secondary"
                     data-bs-dismiss="modal"
                   >
-                    Close
-                  </button>
-                  <button type="button" class="btn btn-primary">
-                    Save changes
+                    إغلاق
                   </button>
                 </div>
               </div>
@@ -350,5 +463,161 @@
     </section>
     <script src="../js/bootstrap.bundle.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script>
+      $(document).on("submit", "#add", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("addAcc", true);
+        $.ajax({
+          type: "POST",
+          url: "code.php",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            let res = jQuery.parseJSON(response);
+            if (res.code == 1) {
+              if (res.errors.field1) {
+                $(".fName").addClass("border-danger");
+                $(".passWord").val("");
+                $(".inTro").addClass("text-danger");
+                $(".inTro").text(res.message);
+              }
+              if (res.errors.field2) {
+                $(".lName").addClass("border-danger");
+                $(".passWord").val("");
+                $(".inTro").addClass("text-danger");
+                $(".inTro").text(res.message);
+              }
+              if (res.errors.field3) {
+                $(".userName").addClass("border-danger");
+                $(".passWord").val("");
+                $(".inTro").addClass("text-danger");
+                $(".inTro").text(res.message);
+              }
+              if (res.errors.field4) {
+                $(".passWord").addClass("border-danger");
+                $(".passWord").val("");
+                $(".inTro").addClass("text-danger");
+                $(".inTro").text(res.message);
+              }
+              if (res.errors.field5) {
+                $(".phOne").addClass("border-danger");
+                $(".passWord").val("");
+                $(".inTro").addClass("text-danger");
+                $(".inTro").text(res.message);
+              }
+            }
+            if (res.code == 2) {
+              $(".userName").addClass("border-danger");
+              $(".passWord").val("");
+              $(".inTro").addClass("text-danger");
+              $(".inTro").text(res.message);
+            }
+            if (res.code == 200) {
+              $('#addModal').modal('hide');                 
+              $('#add')[0].reset();
+              $('#table').load(location.href + " #table");
+              alertify.success(res.message); 
+            }
+          },
+        });
+      });
+      $(document).on('click', '.editBtn', function () {
+        let account_id = $(this).val();
+        $.ajax({
+            type: "GET",
+            url: "code.php?edit_account_id=" + account_id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                alert(res.message);
+                }else if(res.code == 200){
+
+                    $('.editFname').val(res.data.fname);
+                    $('.editLname').val(res.data.lname);
+                    $('.editUserName').val(res.data.username);
+                    $('.editPhone').val(res.data.phone);
+                    $('#editModal').modal('show');
+                }
+            }
+        });
+      });
+      $(document).on("submit", "#edit", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("editAcc", true);
+        $.ajax({
+          type: "POST",
+          url: "code.php",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            let res = jQuery.parseJSON(response);
+            if (res.code == 1) {
+              if (res.errors.field1) {
+                $(".editFname").addClass("border-danger");
+                $(".editPassword").val("");
+                $(".inTro").addClass("text-danger");
+                $(".inTro").text(res.message);
+              }
+              if (res.errors.field2) {
+                $(".editLname").addClass("border-danger");
+                $(".editPassword").val("");
+                $(".inTro").addClass("text-danger");
+                $(".inTro").text(res.message);
+              }
+              if (res.errors.field3) {
+                $(".editUserName").addClass("border-danger");
+                $(".editPassword").val("");
+                $(".inTro").addClass("text-danger");
+                $(".inTro").text(res.message);
+              }
+              if (res.errors.field4) {
+                $(".editPhone").addClass("border-danger");
+                $(".editPassword").val("");
+                $(".inTro").addClass("text-danger");
+                $(".inTro").text(res.message);
+              }
+            }
+            if (res.code == 2) {
+              $(".editUserName").addClass("border-danger");
+              $(".editPassword").val("");
+              $(".inTro").addClass("text-danger");
+              $(".inTro").text(res.message);
+            }
+            if (res.code == 200) {
+              $('#editModal').modal('hide');
+              $('#table').load(location.href + " #table");
+              alertify.success(res.message); 
+            }
+          },
+        });
+      });
+      $(document).on('click', '.viewBtn', function () {
+        let account_id = $(this).val();
+        $.ajax({
+            type: "GET",
+            url: "code.php?view_account_id=" + account_id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                alert(res.message);
+                }else if(res.code == 200){
+                    $('.viewFname').text(res.data.fname);
+                    $('.viewLname').text(res.data.lname);
+                    $('.viewUserName').text(res.data.username);
+                    $('.viewPhone').text(res.data.phone);
+                    $('#viewModal').modal('show');
+                }
+
+            }
+        });
+      });
+    </script>
   </body>
 </html>
