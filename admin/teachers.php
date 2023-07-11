@@ -142,7 +142,7 @@
           <h3 class="text-primary text-center mt-3">ادارة الحسابات اﻷساتذة</h3>
         </div>
         <div class="mt-4">
-          <p class="text-center">here the view of the dashbord</p>
+          <p class="text-center">here the view of the teachers dashbord</p>
         </div>
       </main>
     </section>
