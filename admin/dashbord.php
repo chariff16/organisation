@@ -56,25 +56,31 @@
           </div>
           <div class="offcanvas-body p-0">
             <a
-              href="dashbord.html"
-              class="text-light d-block text-decoration-none p-3"
+              href="dashbord.php"
+              class="bg-light d-block text-decoration-none p-3"
             >
               ادارة الحسابات الطلبة
             </a>
             <a
-              href="teachers.html"
-              class="bg-light d-block text-decoration-none py-3 px-4"
+              href="teachers.php"
+              class="text-light d-block text-decoration-none py-3 px-4"
             >
               ادارة الحسابات اﻷساتذة
             </a>
             <a
-              href="post.html"
+              href="admins.php"
+              class="text-light d-block text-decoration-none py-3 px-4"
+            >
+              ادارة الحسابات الإدارة
+            </a>
+            <a
+              href="post.php"
               class="text-light d-block text-decoration-none py-3 px-4"
             >
               المنشورات
             </a>
             <a
-              href="donners.html"
+              href="donners.php"
               class="text-light d-block text-decoration-none py-3 px-4"
             >
               قائمة المحسنين
@@ -100,25 +106,31 @@
     <section class="d-flex">
       <aside class="bg-primary aside-bar d-none d-md-inline">
         <a
-          href="dashbord.html"
-          class="text-light d-block text-decoration-none py-3 px-4"
+          href="dashbord.php"
+          class="bg-light d-block text-decoration-none py-3 px-4"
         >
           ادارة الحسابات الطلبة
         </a>
         <a
-          href="teachers.html"
-          class="bg-light d-block text-decoration-none py-3 px-4"
+          href="teachers.php"
+          class="text-light d-block text-decoration-none py-3 px-4"
         >
           ادارة الحسابات اﻷساتذة
         </a>
         <a
-          href="post.html"
+          href="admins.php"
+          class="text-light d-block text-decoration-none py-3 px-4"
+        >
+          ادارة الحسابات الإدارة
+        </a>
+        <a
+          href="post.php"
           class="text-light d-block text-decoration-none py-3 px-4"
         >
           المنشورات
         </a>
         <a
-          href="donners.html"
+          href="donners.php"
           class="text-light d-block text-decoration-none py-3 px-4"
         >
           قائمة المحسنين
@@ -126,10 +138,87 @@
       </aside>
       <main>
         <div>
-          <h3 class="text-primary text-center mt-3">ادارة الحسابات اﻷساتذة</h3>
+          <h3 class="text-primary text-center mt-3">إدارة الحسابات الطلبة</h3>
         </div>
-        <div class="mt-4">
-          <p class="text-center">here the view of the dashbord</p>
+        <div class="mx-5 mt-3">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+          >
+            إضافة طالب
+          </button>
+          <div
+            class="modal fade"
+            id="exampleModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    إضافة طالب
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  هنا يدخل المدير معلومات الطالب الذي يريد إضافته
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button type="button" class="btn btn-primary">
+                    Save changes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 mx-5">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">الإسم</th>
+                <th scope="col">اللقب</th>
+                <th scope="col">الفوج</th>
+                <th scope="col">رقم الهاتف</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>أسامة</td>
+                <td>بن سليمان</td>
+                <td>2</td>
+                <td>0600000000</td>
+              </tr>
+              <tr>
+                <td>محمد شريف</td>
+                <td>بن سليمان</td>
+                <td>4</td>
+                <td>0600000000</td>
+              </tr>
+              <tr>
+                <td>أنفال</td>
+                <td>بن سليمان</td>
+                <td>3</td>
+                <td>0600000000</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </main>
     </section>

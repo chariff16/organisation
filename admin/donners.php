@@ -56,32 +56,32 @@
           </div>
           <div class="offcanvas-body p-0">
             <a
-              href="dashbord.html"
+              href="dashbord.php"
               class="text-light d-block text-decoration-none p-3"
             >
               ادارة الحسابات الطلبة
             </a>
             <a
-              href="teachers.html"
+              href="teachers.php"
               class="text-light d-block text-decoration-none py-3 px-4"
             >
               ادارة الحسابات اﻷساتذة
             </a>
             <a
-              href="admins.html"
+              href="admins.php"
               class="text-light d-block text-decoration-none py-3 px-4"
             >
               ادارة الحسابات الإدارة
             </a>
             <a
-              href="post.html"
-              class="bg-light d-block text-decoration-none py-3 px-4"
+              href="post.php"
+              class="text-light d-block text-decoration-none py-3 px-4"
             >
               المنشورات
             </a>
             <a
-              href="donners.html"
-              class="text-light d-block text-decoration-none py-3 px-4"
+              href="donners.php"
+              class="bg-light d-block text-decoration-none py-3 px-4"
             >
               قائمة المحسنين
             </a>
@@ -106,39 +106,39 @@
     <section class="d-flex">
       <aside class="bg-primary aside-bar d-none d-md-inline">
         <a
-          href="dashbord.html"
+          href="dashbord.php"
           class="text-light d-block text-decoration-none py-3 px-4"
         >
           ادارة الحسابات الطلبة
         </a>
         <a
-          href="teachers.html"
+          href="teachers.php"
           class="text-light d-block text-decoration-none py-3 px-4"
         >
           ادارة الحسابات اﻷساتذة
         </a>
         <a
-          href="admins.html"
+          href="admins.php"
           class="text-light d-block text-decoration-none py-3 px-4"
         >
           ادارة الحسابات الإدارة
         </a>
         <a
-          href="post.html"
-          class="bg-light d-block text-decoration-none py-3 px-4"
+          href="post.php"
+          class="text-light d-block text-decoration-none py-3 px-4"
         >
           المنشورات
         </a>
         <a
-          href="donners.html"
-          class="text-light d-block text-decoration-none py-3 px-4"
+          href="donners.php"
+          class="bg-light d-block text-decoration-none py-3 px-4"
         >
           قائمة المحسنين
         </a>
       </aside>
       <main>
         <div>
-          <h3 class="text-primary text-center mt-3">المنشورات</h3>
+          <h3 class="text-primary text-center mt-3">قائمة المحسنين</h3>
         </div>
         <div class="mt-4">
           <p class="text-center">here the view of the dashbord</p>

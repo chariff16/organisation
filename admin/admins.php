@@ -62,13 +62,13 @@
           </div>
           <div class="offcanvas-body p-0">
             <a
-              href="dashbord.html"
+              href="dashbord.php"
               class="text-light d-block text-decoration-none p-3"
             >
               ادارة الحسابات الطلبة
             </a>
             <a
-              href="teachers.html"
+              href="teachers.php"
               class="text-light d-block text-decoration-none py-3 px-4"
             >
               ادارة الحسابات اﻷساتذة
@@ -80,13 +80,13 @@
               ادارة الحسابات الإدارة
             </a>
             <a
-              href="post.html"
+              href="post.php"
               class="text-light d-block text-decoration-none py-3 px-4"
             >
               المنشورات
             </a>
             <a
-              href="donners.html"
+              href="donners.php"
               class="text-light d-block text-decoration-none py-3 px-4"
             >
               قائمة المحسنين
@@ -112,13 +112,13 @@
     <section class="d-flex">
       <aside class="bg-primary aside-bar d-none d-md-inline">
         <a
-          href="dashbord.html"
+          href="dashbord.php"
           class="text-light d-block text-decoration-none py-3 px-4"
         >
           ادارة الحسابات الطلبة
         </a>
         <a
-          href="teachers.html"
+          href="teachers.php"
           class="text-light d-block text-decoration-none py-3 px-4"
         >
           ادارة الحسابات اﻷساتذة
@@ -130,13 +130,13 @@
           ادارة الحسابات الإدارة
         </a>
         <a
-          href="post.html"
+          href="post.php"
           class="text-light d-block text-decoration-none py-3 px-4"
         >
           المنشورات
         </a>
         <a
-          href="donners.html"
+          href="donners.php"
           class="text-light d-block text-decoration-none py-3 px-4"
         >
           قائمة المحسنين
@@ -432,7 +432,7 @@
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">
-                    إضافة عضو
+                    حذف عضو
                   </h1>
                   <button
                     type="button"
@@ -442,18 +442,12 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  هنا يدخل المدير معلومات عضو الذي يريد إضافته
+                  <input type="text" class="d-none deleteId" >
+                  <p>هل أنت متأكد من حذف هذا العضو</p>
                 </div>
                 <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                  >
-                    Close
-                  </button>
-                  <button type="button" class="btn btn-primary">
-                    Save changes
+                  <button type="button" class="btn btn-danger" id="delete">
+                    حذف
                   </button>
                 </div>
               </div>
@@ -613,6 +607,30 @@
                     $('.viewUserName').text(res.data.username);
                     $('.viewPhone').text(res.data.phone);
                     $('#viewModal').modal('show');
+                }
+
+            }
+        });
+      });
+      $(document).on('click', '.deleteBtn', function () {
+        let account_id = $(this).val();
+        let deleteInput = $('.deleteId').val(account_id);
+      });
+      $(document).on("click", "#delete", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        let account_id = $('.deleteId').val();
+        $.ajax({
+            type: "GET",
+            url: "code.php?deleteAccount=" + account_id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                  alert(res.message);
+                }else if(res.code == 200){
+                    $('#deleteModal').modal('hide');
+                    $('#table').load(location.href + " #table");
+                    alertify.success(res.message); 
                 }
 
             }

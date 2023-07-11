@@ -183,4 +183,25 @@
             return false;
         }
     };
-    
+    if (isset($_GET['deleteAccount'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_GET['deleteAccount']);
+        $sql = "DELETE FROM `user` WHERE id = '$id'";
+        $run = mysqli_query($con, $sql);
+        if ($run) {
+            $res = [
+                'code' => 200,
+                'message' => 'تمت حذف العضو',
+                'data' => $row
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $res = [
+                'code' => 404,
+                'message' => 'يرجى الإتصال بمطور الموقع'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    };
