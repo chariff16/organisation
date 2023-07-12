@@ -146,7 +146,7 @@
             type="button"
             class="btn btn-outline-primary"
             data-bs-toggle="modal"
-            data-bs-target="#addModal"
+            data-bs-target="#addPostModal"
           >
             إضافة منشور
         </button>
@@ -210,7 +210,7 @@
         </div>
       </main>
       <div class="mOdels">
-          <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
@@ -226,18 +226,18 @@
                 </div>
                 <div class="modal-body">
                   <form id="addPost">
-                    <label class="form-label">عنوان المنشور</label>
+                    <label class="form-label titelLable">عنوان المنشور</label>
                     <input
                       type="text"
-                      name="fname"
-                      class="form-control fName"
+                      name="postTitel"
+                      class="form-control postTitel"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label">المنشور</label>
+                    <label class="form-label postLable">المنشور</label>
                     <textarea
                       type="text"
-                      name="lname"
-                      class="form-control lName"
+                      name="postInput"
+                      class="form-control postInput"
                       aria-labelledby="passwordHelpBlock"
                       style="height: 100px"
                     ></textarea>
@@ -320,6 +320,38 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script>
+      $(document).on("submit", "#addPost", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("addPost", true);
+        $.ajax({
+          type: "POST",
+          url: "code.php",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            let res = jQuery.parseJSON(response);
+            if (res.code == 1) {
+              if (res.errors.post) {
+                $(".postInput").addClass("border-danger");
+                $(".postLable").addClass("text-danger");
+              }
+              if (res.errors.title) {
+                $(".postTitel").addClass("border-danger");
+                $(".titelLable").addClass("text-danger");
+              }
+            }
+            if (res.code == 200) {
+              $('#addPostModal').modal('hide');                 
+              $('#addPost')[0].reset();
+              $('#table').load(location.href + " #table");
+              alertify.success(res.message); 
+            }
+          },
+        });
+      });
       $(document).on('click', '.viewBtn', function () {
         let account_id = $(this).val();
         $.ajax({

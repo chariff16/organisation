@@ -249,3 +249,33 @@
             return ;
         }
     };
+    if (isset($_POST['addPost'])) {
+        require('../dbcon.php');
+        $title = mysqli_real_escape_string($con, $_POST['postTitel']);
+        $post = mysqli_real_escape_string($con, $_POST['postInput']);
+        $errors = array();
+        if ($post == NULL || $title == NULL ) {
+            if ($post == NULL) {
+                $errors['post'] = 'Field 1 is required';
+            }
+            if ($title == NULL) {
+                $errors['title'] = 'Field 2 is required';
+            }
+            $res = [
+                'code' => 1,
+                'message' => 'يرجى إدخال جميع المعلومات',
+                'errors' => $errors 
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $sql = "INSERT INTO `postes`(`id`, `titel`, `post`, `date`) VALUES (NULL,'$title','$post',NULL)";
+            $run = mysqli_query($con, $sql);
+            $res = [
+                'code' => 200,
+                'message' => 'تمت إضافة المنشور'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    };
