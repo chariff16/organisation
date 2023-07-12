@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/bootstrap.css" />
     <link rel="stylesheet" href="../css/admin_dashbord.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
@@ -194,7 +195,7 @@
                     type="button"
                     class="btn btn-outline-danger btn-sm deleteBtn"
                     data-bs-toggle="modal"
-                    data-bs-target="#deleteModal"
+                    data-bs-target="#deletePostModal"
                     value="<?php echo $row['id'] ?>"
                   >
                   <i class="fas fa-trash-alt"></i>
@@ -209,7 +210,7 @@
         </div>
       </main>
       <div class="mOdels">
-      <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
@@ -225,18 +226,14 @@
                 </div>
                 <div class="modal-body">
                   <form id="addPost">
-                    <label class="form-label"
-                      >عنوان المنشور</label
-                    >
+                    <label class="form-label">عنوان المنشور</label>
                     <input
                       type="text"
                       name="fname"
                       class="form-control fName"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label"
-                      >المنشور</label
-                    >
+                    <label class="form-label">المنشور</label>
                     <textarea
                       type="text"
                       name="lname"
@@ -257,8 +254,7 @@
               </div>
             </div>
           </div>
-      </div>
-      <div class="modal fade" id="viewPostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="viewPostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
@@ -292,6 +288,33 @@
               </div>
             </div>
           </div>
+          <div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    حذف منشور
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <input type="text" class="d-none deleteId" >
+                  <p>هل أنت متأكد من حذف هذا المنشور</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" id="deletePost">
+                    حذف
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>    
     </section>
     <script src="../js/bootstrap.bundle.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -310,6 +333,30 @@
                     $('.viewPostTitel').text(res.data.titel);
                     $('.viewPostInput').text(res.data.post);
                     $('#viewModal').modal('show');
+                }
+
+            }
+        });
+      });
+      $(document).on('click', '.deleteBtn', function () {
+        let account_id = $(this).val();
+        let deleteInput = $('.deleteId').val(account_id);
+      });
+      $(document).on("click", "#deletePost", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        let account_id = $('.deleteId').val();
+        $.ajax({
+            type: "GET",
+            url: "code.php?deletePost=" + account_id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                  alert(res.message);
+                }else if(res.code == 200){
+                    $('#deletePostModal').modal('hide');
+                    $('#table').load(location.href + " #table");
+                    alertify.success(res.message); 
                 }
 
             }

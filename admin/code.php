@@ -227,3 +227,25 @@
             return ;
         }
     };
+    if (isset($_GET['deletePost'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_GET['deletePost']);
+        $sql = "DELETE FROM `postes` WHERE id = '$id'";
+        $run = mysqli_query($con, $sql);
+        if ($run) {
+            $res = [
+                'code' => 200,
+                'message' => 'تمت حذف المنشور',
+                'data' => $row
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $res = [
+                'code' => 404,
+                'message' => 'يرجى الإتصال بمطور الموقع'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    };
