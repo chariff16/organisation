@@ -185,7 +185,7 @@
                     type="button"
                     class="btn btn-outline-success btn-sm viewBtn"
                     data-bs-toggle="modal"
-                    data-bs-target="#viewModal"
+                    data-bs-target="#viewPostModal"
                     value="<?php echo $row['id'] ?>"
                   >
                     <i class="fas fa-eye"></i>
@@ -258,8 +258,63 @@
             </div>
           </div>
       </div>
+      <div class="modal fade" id="viewPostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    المنشور
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div class="d-flex">
+                    <p class="col-2">العنوان</p>
+                    <p class="col fw-bold viewPostTitel">محمد</p>
+                  </div>
+                  <p>المنشور</p>
+                  <p class="border rounded p-2 viewPostInput">محتوى المنشور</p>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    إغلاق
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
     </section>
     <script src="../js/bootstrap.bundle.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script>
+      $(document).on('click', '.viewBtn', function () {
+        let account_id = $(this).val();
+        $.ajax({
+            type: "GET",
+            url: "code.php?view_post_id=" + account_id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                alert(res.message);
+                }else if(res.code == 200){
+                    $('.viewPostTitel').text(res.data.titel);
+                    $('.viewPostInput').text(res.data.post);
+                    $('#viewModal').modal('show');
+                }
+
+            }
+        });
+      });
+    </script>
   </body>
 </html>
