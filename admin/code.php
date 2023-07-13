@@ -341,3 +341,129 @@
             }
         }
     };
+    if (isset($_POST['addDonner'])) {
+        require('../dbcon.php');
+        $fname = mysqli_real_escape_string($con, $_POST['donnerFname']);
+        $lname = mysqli_real_escape_string($con, $_POST['donnerLname']);
+        $phone = mysqli_real_escape_string($con, $_POST['donnerPhone']);
+        $funds = mysqli_real_escape_string($con, $_POST['donnerFunds']);
+        $errors = array();
+        if ($fname == NULL || $lname == NULL || $phone == NULL || $funds == NULL ) {
+            if ($fname == NULL) {
+                $errors['fname'] = 'Field 1 is required';
+            }
+            if ($lname == NULL) {
+                $errors['lname'] = 'Field 2 is required';
+            }
+            if ($phone == NULL) {
+                $errors['phone'] = 'Field 1 is required';
+            }
+            if ($funds == NULL) {
+                $errors['funds'] = 'Field 2 is required';
+            }
+            $res = [
+                'code' => 1,
+                'message' => 'يرجى إدخال جميع المعلومات',
+                'errors' => $errors 
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $sql = "INSERT INTO `donner`(`id`, `fname`, `lname`, `phone`, `funds`) VALUES (NULL,'$fname','$lname','$phone','$funds')";
+            $run = mysqli_query($con, $sql);
+            $res = [
+                'code' => 200,
+                'message' => 'تمت إضافة المحسن'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    };
+    if (isset($_GET['deleteDonner'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_GET['deleteDonner']);
+        $sql = "DELETE FROM `donner` WHERE id = '$id'";
+        $run = mysqli_query($con, $sql);
+        if ($run) {
+            $res = [
+                'code' => 200,
+                'message' => 'تمت حذف المحسن',
+                'data' => $row
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $res = [
+                'code' => 404,
+                'message' => 'يرجى الإتصال بمطور الموقع'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    };
+    if (isset($_GET['edit_donner_id'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_GET['edit_donner_id']);
+        $sql = "SELECT * FROM `donner` WHERE id = '$id'";
+        $run = mysqli_query($con, $sql);
+        if ($row = mysqli_fetch_assoc($run)) {
+            $res = [
+                'code' => 200,
+                'message' => 'تمت إضافة عضو',
+                'data' => $row
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $res = [
+                'code' => 404,
+                'message' => 'يرجى الإتصال بمطور الموقع'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    };
+    if (isset($_POST['editDonner'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_POST['editDonnerId']);
+        $fname = mysqli_real_escape_string($con, $_POST['editDonnerFname']);
+        $lname = mysqli_real_escape_string($con, $_POST['editDonnerLname']);
+        $phone = mysqli_real_escape_string($con, $_POST['editDonnerPhone']);
+        $errors = array();
+        if ($lname == NULL || $fname == NULL || $phone == NULL) {
+            if ($lname == NULL) {
+                $errors['lname'] = 'Field 1 is required';
+            }
+            if ($fname == NULL) {
+                $errors['fname'] = 'Field 2 is required';
+            }
+            if ($phone == NULL) {
+                $errors['phone'] = 'Field 2 is required';
+            }
+            $res = [
+                'code' => 1,
+                'message' => 'يرجى إدخال جميع المعلومات',
+                'errors' => $errors 
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $sql = "UPDATE `donner` SET `fname`='$fname',`lname`='$lname',`phone`='$phone' WHERE id = '$id'";
+            $run = mysqli_query($con, $sql);
+            if ($run) {
+                $res = [
+                    'code' => 200,
+                    'message' => 'تم تحديث المنشور'
+                ];
+                echo json_encode($res);
+                return ;
+            }else {
+                $res = [
+                    'code' => 404,
+                    'message' => 'يرجى الإتصال بمطور الموقع'
+                ];
+                echo json_encode($res);
+                return ;
+            }
+        }
+    };

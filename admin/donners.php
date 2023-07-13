@@ -156,7 +156,7 @@
               <tr>
                 <th scope="col">الاسم</th>
                 <th class="col">اللقب</th>
-                <th class="col">المبلغ</th>
+                <th class="col">الهاتف</th>
                 <th class="col-1">
                   <p class="d-none d-md-block mb-0">تعديل/معاينة/حذف</p>
                   <p class="d-md-none mb-0">فعل</p>
@@ -173,7 +173,7 @@
               <tr>
                 <td class="align-middle"><?php echo $row['fname'] ?></td>
                 <td class="align-middle"><?php echo $row['lname'] ?></td>
-                <td class="align-middle"><?php echo $row['funds'] ?> دينار</td>
+                <td class="align-middle"><?php echo $row['phone'] ?></td>
                 <td class="d-md-flex d-sm-inline-block justify-content-around">
                   <button
                     type="button"
@@ -231,28 +231,28 @@
                     <label class="form-label donnerFnameLable">اسم المحسن</label>
                     <input
                       type="text"
-                      name="postTitel"
+                      name="donnerFname"
                       class="form-control donnerFname"
                       aria-labelledby="passwordHelpBlock"
                     />
                     <label class="form-label donnerLnameLable">لقب المحسن</label>
                     <input
                       type="text"
-                      name="postTitel"
+                      name="donnerLname"
                       class="form-control donnerLname"
                       aria-labelledby="passwordHelpBlock"
                     />
                     <label class="form-label donerPhoneLable">هاتف المحسن</label>
                     <input
                       type="text"
-                      name="postTitel"
+                      name="donnerPhone"
                       class="form-control donnerPhone"
                       aria-labelledby="passwordHelpBlock"
                     />
                     <label class="form-label donnerFundsLable">مبلغ التبرع</label>
                     <input
                       type="text"
-                      name="postTitel"
+                      name="donnerFunds"
                       class="form-control donnerFunds"
                       aria-labelledby="passwordHelpBlock"
                     />
@@ -284,34 +284,27 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <form id="editPost">
+                  <form id="editDonner">
                     <input type="text" class="d-none editDonnerId" name="editDonnerId">
                     <label class="form-label editDonnerFnameLable">اسم المحسن</label>
                     <input
                       type="text"
-                      name="postTitel"
+                      name="editDonnerFname"
                       class="form-control editDonnerFname"
                       aria-labelledby="passwordHelpBlock"
                     />
                     <label class="form-label editDonnerLnameLable">لقب المحسن</label>
                     <input
                       type="text"
-                      name="postTitel"
+                      name="editDonnerLname"
                       class="form-control editDonnerLname"
                       aria-labelledby="passwordHelpBlock"
                     />
                     <label class="form-label editDonerPhoneLable">هاتف المحسن</label>
                     <input
                       type="text"
-                      name="postTitel"
+                      name="editDonnerPhone"
                       class="form-control editDonnerPhone"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label editDonnerFundsLable">مبلغ التبرع</label>
-                    <input
-                      type="text"
-                      name="postTitel"
-                      class="form-control editDonnerFunds"
                       aria-labelledby="passwordHelpBlock"
                     />
                     <div class="modal-footer">
@@ -386,11 +379,11 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <input type="text" class="d-none deleteId" >
+                  <input type="text" class="d-none deleteDonnerId" >
                   <p>هل أنت متأكد من حذف هذا المحسن</p>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" id="deletePost">
+                  <button type="button" class="btn btn-danger" id="deleteDonner">
                     حذف
                   </button>
                 </div>
@@ -402,5 +395,147 @@
     <script src="../js/bootstrap.bundle.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script>
+      $(document).on("submit", "#addDonner", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("addDonner", true);
+        $.ajax({
+          type: "POST",
+          url: "code.php",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            let res = jQuery.parseJSON(response);
+            if (res.code == 1) {
+              if (res.errors.fname) {
+                $(".donnerFname").addClass("border-danger");
+                $(".donnerFnameLable").addClass("text-danger");
+              }
+              if (res.errors.lname) {
+                $(".donnerLname").addClass("border-danger");
+                $(".donnerLnameLable").addClass("text-danger");
+              }
+              if (res.errors.phone) {
+                $(".donnerPhone").addClass("border-danger");
+                $(".donnerPhoneLable").addClass("text-danger");
+              }
+              if (res.errors.phone) {
+                $(".donnerFunds").addClass("border-danger");
+                $(".donnerFundsLable").addClass("text-danger");
+              }
+            }
+            if (res.code == 200) {
+              $('#addDonnerModal').modal('hide');                 
+              $('#addDonner')[0].reset();
+              $('#table').load(location.href + " #table");
+              alertify.success(res.message); 
+            }
+          },
+        });
+      });
+      $(document).on('click', '.editBtn', function () {
+        let id = $(this).val();
+        let editId = $('.editDonnerId').val(id);
+        $.ajax({
+            type: "GET",
+            url: "code.php?edit_donner_id=" + id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                  alert(res.message);
+                }else if(res.code == 200){
+
+                    $('.editDonnerLname').val(res.data.lname);
+                    $('.editDonnerFname').val(res.data.fname);
+                    $('.editDonnerPhone').val(res.data.phone);
+                    $('#editPostModal').modal('show');
+                }
+            }
+        });
+      });
+      $(document).on("submit", "#editDonner", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("editDonner", true);
+        $.ajax({
+          type: "POST",
+          url: "code.php",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            let res = jQuery.parseJSON(response);
+            if (res.code == 1) {
+              if (res.errors.lname) {
+                $(".editDonnerFname").addClass("border-danger");
+                $(".editDonnerFnameLable").addClass("text-danger");
+              }
+              if (res.errors.fname) {
+                $(".editDonnerLname").addClass("border-danger");
+                $(".editDonnerLnameLable").addClass("text-danger");
+              }
+              if (res.errors.phone) {
+                $(".editDonnerPhone").addClass("border-danger");
+                $(".editDonerPhoneLable").addClass("text-danger");
+              }
+            }
+            if (res.code == 200) {
+              $('#editDonnerModal').modal('hide');
+              $('#table').load(location.href + " #table");
+              alertify.success(res.message); 
+            }
+            if(res.code == 404) {
+              alert(res.message);
+            }
+          },
+        });
+      });
+      $(document).on('click', '.viewBtn', function () {
+        let account_id = $(this).val();
+        $.ajax({
+            type: "GET",
+            url: "code.php?view_post_id=" + account_id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                alert(res.message);
+                }else if(res.code == 200){
+                    $('.viewPostTitel').text(res.data.titel);
+                    $('.viewPostInput').text(res.data.post);
+                    $('#viewModal').modal('show');
+                }
+
+            }
+        });
+      });
+      $(document).on('click', '.deleteBtn', function () {
+        let id = $(this).val();
+        let deleteInput = $('.deleteDonnerId').val(id);
+      });
+      $(document).on("click", "#deleteDonner", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        let id = $('.deleteDonnerId').val();
+        $.ajax({
+            type: "GET",
+            url: "code.php?deleteDonner=" + id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                  alert(res.message);
+                }else if(res.code == 200){
+                    $('#deletePostModal').modal('hide');
+                    $('#table').load(location.href + " #table");
+                    alertify.success(res.message); 
+                }
+
+            }
+        });
+      });
+    </script>
   </body>
 </html>
