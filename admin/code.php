@@ -279,3 +279,65 @@
             return ;
         }
     };
+    if (isset($_GET['edit_post_id'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_GET['edit_post_id']);
+        $sql = "SELECT * FROM `postes` WHERE id = '$id'";
+        $run = mysqli_query($con, $sql);
+        if ($row = mysqli_fetch_assoc($run)) {
+            $res = [
+                'code' => 200,
+                'message' => 'تمت إضافة عضو',
+                'data' => $row
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $res = [
+                'code' => 404,
+                'message' => 'يرجى الإتصال بمطور الموقع'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    };
+    if (isset($_POST['editPost'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_POST['editPostId']);
+        $title = mysqli_real_escape_string($con, $_POST['postTitel']);
+        $post = mysqli_real_escape_string($con, $_POST['postInput']);
+        $errors = array();
+        if ($post == NULL || $title == NULL ) {
+            if ($title == NULL) {
+                $errors['title'] = 'Field 1 is required';
+            }
+            if ($lname == NULL) {
+                $errors['post'] = 'Field 2 is required';
+            }
+            $res = [
+                'code' => 1,
+                'message' => 'يرجى إدخال جميع المعلومات',
+                'errors' => $errors 
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $sql = "UPDATE `postes` SET `titel`='$title',`post`='$post',`date`= NULL WHERE id = '$id'";
+            $run = mysqli_query($con, $sql);
+            if ($run) {
+                $res = [
+                    'code' => 200,
+                    'message' => 'تم تحديث المنشور'
+                ];
+                echo json_encode($res);
+                return ;
+            }else {
+                $res = [
+                    'code' => 404,
+                    'message' => 'يرجى الإتصال بمطور الموقع'
+                ];
+                echo json_encode($res);
+                return ;
+            }
+        }
+    };

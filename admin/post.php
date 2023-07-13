@@ -177,7 +177,7 @@
                     type="button"
                     class="btn btn-outline-primary btn-sm editBtn"
                     data-bs-toggle="modal"
-                    data-bs-target="#editModal"
+                    data-bs-target="#editPostModal"
                     value="<?php echo $row['id'] ?>"
                   >
                     <i class="far fa-edit"></i>
@@ -247,6 +247,51 @@
                         name="add"
                         class="btn btn-primary"
                         value="إضافة منشور"
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="editPostModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    تعديل منشور
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <form id="editPost">
+                    <input type="text" class="d-none editId" name="editPostId">
+                    <label class="form-label editTitelLable">عنوان المنشور</label>
+                    <input
+                      type="text"
+                      name="postTitel"
+                      class="form-control editPostTitel"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label editPostLable">المنشور</label>
+                    <textarea
+                      type="text"
+                      name="postInput"
+                      class="form-control editPostInput"
+                      aria-labelledby="passwordHelpBlock"
+                      style="height: 100px"
+                    ></textarea>
+                    <div class="modal-footer">
+                      <input
+                        type="submit"
+                        name="add"
+                        class="btn btn-primary"
+                        value="تحديث منشور"
                       />
                     </div>
                   </form>
@@ -348,6 +393,59 @@
               $('#addPost')[0].reset();
               $('#table').load(location.href + " #table");
               alertify.success(res.message); 
+            }
+          },
+        });
+      });
+      $(document).on('click', '.editBtn', function () {
+        let post_id = $(this).val();
+        let editId = $('.editId').val(post_id);
+        $.ajax({
+            type: "GET",
+            url: "code.php?edit_post_id=" + post_id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                  alert(res.message);
+                }else if(res.code == 200){
+
+                    $('.editPostTitel').val(res.data.titel);
+                    $('.editPostInput').val(res.data.post);
+                    $('#editPostModal').modal('show');
+                }
+            }
+        });
+      });
+      $(document).on("submit", "#editPost", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("editPost", true);
+        $.ajax({
+          type: "POST",
+          url: "code.php",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            let res = jQuery.parseJSON(response);
+            if (res.code == 1) {
+              if (res.errors.title) {
+                $(".editPostTitel").addClass("border-danger");
+                $(".editTitelLable").addClass("text-danger");
+              }
+              if (res.errors.post) {
+                $(".editPostInput").addClass("border-danger");
+                $(".editPostLable").addClass("text-danger");
+              }
+            }
+            if (res.code == 200) {
+              $('#editPostModal').modal('hide');
+              $('#table').load(location.href + " #table");
+              alertify.success(res.message); 
+            }
+            if(res.code == 404) {
+              alert(res.message);
             }
           },
         });
