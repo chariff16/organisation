@@ -184,15 +184,14 @@
                   >
                     <i class="far fa-edit"></i>
                   </button>
-                  <button
+                  <a
                     type="button"
+                    href="donnerview.php?donnerId=<?php echo $row['id'] ?>"
                     class="btn btn-outline-success btn-sm viewBtn"
-                    data-bs-toggle="modal"
-                    data-bs-target="#viewDonnerModal"
                     value="<?php echo $row['id'] ?>"
                   >
                     <i class="fas fa-eye"></i>
-                  </button>
+                  </a>
                   <button
                     type="button"
                     class="btn btn-outline-danger btn-sm deleteBtn"
@@ -494,24 +493,6 @@
           },
         });
       });
-      $(document).on('click', '.viewBtn', function () {
-        let account_id = $(this).val();
-        $.ajax({
-            type: "GET",
-            url: "code.php?view_post_id=" + account_id,
-            success: function (response) {
-                var res = jQuery.parseJSON(response);
-                if(res.code == 404) {
-                alert(res.message);
-                }else if(res.code == 200){
-                    $('.viewPostTitel').text(res.data.titel);
-                    $('.viewPostInput').text(res.data.post);
-                    $('#viewModal').modal('show');
-                }
-
-            }
-        });
-      });
       $(document).on('click', '.deleteBtn', function () {
         let id = $(this).val();
         let deleteInput = $('.deleteDonnerId').val(id);
@@ -528,7 +509,7 @@
                 if(res.code == 404) {
                   alert(res.message);
                 }else if(res.code == 200){
-                    $('#deletePostModal').modal('hide');
+                    $('#deleteDonnerModal').modal('hide');
                     $('#table').load(location.href + " #table");
                     alertify.success(res.message); 
                 }
