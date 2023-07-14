@@ -369,14 +369,32 @@
             echo json_encode($res);
             return ;
         }else {
-            $sql = "INSERT INTO `donner`(`id`, `fname`, `lname`, `phone`, `funds`) VALUES (NULL,'$fname','$lname','$phone','$funds')";
+            $sql = "INSERT INTO `donner`(`id`, `fname`, `lname`, `phone`) VALUES (NULL,'$fname','$lname','$phone')";
             $run = mysqli_query($con, $sql);
-            $res = [
-                'code' => 200,
-                'message' => 'تمت إضافة المحسن'
-            ];
-            echo json_encode($res);
-            return ;
+            if ($run) {
+                $sql2 = "SELECT * FROM `donner` ORDER BY id DESC";
+                $run2 = mysqli_query($con, $sql2);
+                $row = mysqli_fetch_assoc($run2);
+                $donnerid = $row['id'];
+                $sql3 = "INSERT INTO `funds`(`id`, `donner_id`, `fund`, `date`) VALUES (NULL,'$donnerid','$funds',NULL)";
+                $run3 = mysqli_query($con, $sql3);
+                if ($run3) {
+                    $res = [
+                        'code' => 200,
+                        'message' => 'تمت إضافة المحسن'
+                    ];
+                    echo json_encode($res);
+                    return ;
+                }else {
+                    $res = [
+                        'code' => 500,
+                        'message' => 'يجرى الاتصال بمطور الموقع'
+                    ];
+                    echo json_encode($res);
+                    return ;
+                }
+            }
+            
         }
     };
     if (isset($_GET['deleteDonner'])) {
@@ -465,5 +483,112 @@
                 echo json_encode($res);
                 return ;
             }
+        }
+    };
+    if (isset($_POST['addFunds'])) {
+        require('../dbcon.php');
+        $fund = mysqli_real_escape_string($con, $_POST['fundAdded']);
+        $donnerId = mysqli_real_escape_string($con, $_POST['donnerId']);
+        if ($fund == NULL) {
+            $res = [
+                'code' => 1,
+                'message' => 'يرجى إدخال جميع المعلومات'
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $sql = "INSERT INTO `funds`(`id`, `donner_id`, `fund`, `date`) VALUES (NULL,'$donnerId','$fund',NULL)";
+            $run = mysqli_query($con, $sql);
+            if ($run) {
+                $res = [
+                    'code' => 200,
+                    'message' => 'تمت إضافة التبرع'
+                ];
+                echo json_encode($res);
+                return ;
+            }else {
+                $res = [
+                    'code' => 500,
+                    'message' => 'يجرى الاتصال بمطور الموقع'
+                ];
+                echo json_encode($res);
+                return ;
+            }
+            
+        }
+    };
+    if (isset($_GET['edit_fund_id'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_GET['edit_fund_id']);
+        $sql = "SELECT * FROM `funds` WHERE id = '$id'";
+        $run = mysqli_query($con, $sql);
+        if ($row = mysqli_fetch_assoc($run)) {
+            $res = [
+                'code' => 200,
+                'message' => 'تمت إضافة عضو',
+                'data' => $row
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $res = [
+                'code' => 404,
+                'message' => 'يرجى الإتصال بمطور الموقع'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    };
+    if (isset($_POST['editFunds'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_POST['editFundId']);
+        $fund = mysqli_real_escape_string($con, $_POST['editFundsInput']);
+        if ($fund == NULL) {
+            $res = [
+                'code' => 1,
+                'message' => 'يرجى إدخال جميع المعلومات'
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $sql = "UPDATE `funds` SET `fund`='$fund' WHERE id = '$id'";
+            $run = mysqli_query($con, $sql);
+            if ($run) {
+                $res = [
+                    'code' => 200,
+                    'message' => 'تم تحديث المنشور'
+                ];
+                echo json_encode($res);
+                return ;
+            }else {
+                $res = [
+                    'code' => 404,
+                    'message' => 'يرجى الإتصال بمطور الموقع'
+                ];
+                echo json_encode($res);
+                return ;
+            }
+        }
+    };
+    if (isset($_GET['deleteFund'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_GET['deleteFund']);
+        $sql = "DELETE FROM `funds` WHERE id = '$id'";
+        $run = mysqli_query($con, $sql);
+        if ($run) {
+            $res = [
+                'code' => 200,
+                'message' => 'تمت حذف التبرع',
+                'data' => $row
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $res = [
+                'code' => 404,
+                'message' => 'يرجى الإتصال بمطور الموقع'
+            ];
+            echo json_encode($res);
+            return ;
         }
     };
