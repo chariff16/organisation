@@ -138,27 +138,82 @@
       </aside>
       <main>
         <div>
-          <h3 class="text-primary text-center mt-3">إدارة الحسابات الطلبة</h3>
+          <h3 class="text-primary text-center mt-3">قائمة الطلبة</h3>
         </div>
-        <div class="mx-5 mt-3">
-          <button
+        <div class="mt-3 mx-5">
+        <button
             type="button"
             class="btn btn-outline-primary"
             data-bs-toggle="modal"
-            data-bs-target="#exampleModal"
+            data-bs-target="#addStudentModal"
           >
             إضافة طالب
-          </button>
-          <div
-            class="modal fade"
-            id="exampleModal"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
+        </button>
+        <div class="mt-4">
+          <table class="table table-hover" id="table">
+            <thead>
+              <tr>
+                <th scope="col">الاسم</th>
+                <th class="col">اللقب</th>
+                <th class="col">الهاتف</th>
+                <th class="col-1">
+                  <p class="d-none d-md-block mb-0">تعديل/معاينة/حذف</p>
+                  <p class="d-md-none mb-0">فعل</p>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+                require("../dbcon.php");
+                $sql = "SELECT * FROM `user` WHERE role = 'student'";
+                $run = mysqli_query($con, $sql);
+                while($row = mysqli_fetch_assoc($run)){
+              ?>
+              <tr>
+                <td class="align-middle"><?php echo $row['fname'] ?></td>
+                <td class="align-middle"><?php echo $row['lname'] ?></td>
+                <td class="align-middle"><?php echo $row['phone'] ?></td>
+                <td class="d-md-flex d-sm-inline-block justify-content-around">
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary btn-sm editBtn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editStudentModal"
+                    value="<?php echo $row['id'] ?>"
+                  >
+                    <i class="far fa-edit"></i>
+                  </button>
+                  <a
+                    type="button"
+                    href="donnerview.php?studentId=<?php echo $row['id'] ?>"
+                    class="btn btn-outline-success btn-sm viewBtn"
+                    value="<?php echo $row['id'] ?>"
+                  >
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger btn-sm deleteBtn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteStudentModal"
+                    value="<?php echo $row['id'] ?>"
+                  >
+                  <i class="fas fa-trash-alt"></i>
+                  </button>
+                </td>
+              </tr>
+              <?php
+                }
+              ?>
+            </tbody>
+          </table>
+        </div>
+      </main>
+      <div class="mOdels">
+          <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
-                <div class="modal-header">
+                <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">
                     إضافة طالب
                   </h1>
@@ -170,57 +225,140 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  هنا يدخل المدير معلومات الطالب الذي يريد إضافته
+                  <form id="addDonner">
+                    <label class="form-label donnerFnameLable">اسم الطالب</label>
+                    <input
+                      type="text"
+                      name="donnerFname"
+                      class="form-control donnerFname"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label donnerLnameLable">لقب الطالب</label>
+                    <input
+                      type="text"
+                      name="donnerLname"
+                      class="form-control donnerLname"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label donerPhoneLable">هاتف الطالب</label>
+                    <input
+                      type="text"
+                      name="donnerPhone"
+                      class="form-control donnerPhone"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label donnerFundsLable">القسم</label>
+                    <input
+                      type="text"
+                      name="donnerFunds"
+                      class="form-control donnerFunds"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <div class="modal-footer">
+                      <input
+                        type="submit"
+                        name="add"
+                        class="btn btn-primary"
+                        value="إضافة طالب"
+                      />
+                    </div>
+                  </form>
                 </div>
-                <div class="modal-footer">
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    تعديل معلومات الطالب
+                  </h1>
                   <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="btn-close"
                     data-bs-dismiss="modal"
-                  >
-                    Close
-                  </button>
-                  <button type="button" class="btn btn-primary">
-                    Save changes
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <form id="editDonner">
+                    <input type="text" class="d-none editDonnerId" name="editDonnerId">
+                    <label class="form-label editDonnerFnameLable">اسم الطالب</label>
+                    <input
+                      type="text"
+                      name="editDonnerFname"
+                      class="form-control editDonnerFname"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label editDonnerLnameLable">لقب الطالب</label>
+                    <input
+                      type="text"
+                      name="editDonnerLname"
+                      class="form-control editDonnerLname"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label editDonerPhoneLable">هاتف الطالب</label>
+                    <input
+                      type="text"
+                      name="editDonnerPhone"
+                      class="form-control editDonnerPhone"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label editDonerPhoneLable">إسم المستخدم للطالب</label>
+                    <input
+                      type="text"
+                      name="editDonnerPhone"
+                      class="form-control editDonnerPhone"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label editDonerPhoneLable">كلمة السر للطالب</label>
+                    <input
+                      type="text"
+                      name="editDonnerPhone"
+                      class="form-control editDonnerPhone"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <div class="modal-footer">
+                      <input
+                        type="submit"
+                        name="add"
+                        class="btn btn-primary"
+                        value="تحديث المعلومات"
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="deleteStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    حذف طالب
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <input type="text" class="d-none deleteDonnerId" >
+                  <p>هل أنت متأكد من حذف هذا الطالب</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" id="deleteDonner">
+                    حذف
                   </button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="mt-4 mx-5">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th scope="col">الإسم</th>
-                <th scope="col">اللقب</th>
-                <th scope="col">الفوج</th>
-                <th scope="col">رقم الهاتف</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>أسامة</td>
-                <td>بن سليمان</td>
-                <td>2</td>
-                <td>0600000000</td>
-              </tr>
-              <tr>
-                <td>محمد شريف</td>
-                <td>بن سليمان</td>
-                <td>4</td>
-                <td>0600000000</td>
-              </tr>
-              <tr>
-                <td>أنفال</td>
-                <td>بن سليمان</td>
-                <td>3</td>
-                <td>0600000000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </main>
+      </div>
     </section>
     <script src="../js/bootstrap.bundle.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
