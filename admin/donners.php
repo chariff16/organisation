@@ -319,50 +319,6 @@
               </div>
             </div>
           </div>
-          <div class="modal fade" id="viewDonnerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">
-                    معلومات المحسن
-                  </h1>
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div class="modal-body">
-                  <div class="d-flex">
-                    <p class="col-2">الإسم</p>
-                    <p class="col fw-bold viewPostTitel">محمد</p>
-                  </div>
-                  <div class="d-flex">
-                    <p class="col-2">اللقب</p>
-                    <p class="col fw-bold viewPostTitel">محمد</p>
-                  </div>
-                  <div class="d-flex">
-                    <p class="col-2">الهاتف</p>
-                    <p class="col fw-bold viewPostTitel">محمد</p>
-                  </div>
-                  <div class="d-flex">
-                    <p class="col-2">المبلغ المتبرع بيه</p>
-                    <p class="col fw-bold viewPostTitel align-self-center">محمد</p>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                  >
-                    إغلاق
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="modal fade" id="deleteDonnerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
