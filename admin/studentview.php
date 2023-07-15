@@ -1,3 +1,11 @@
+<?php
+  if ((isset($_GET['studentId']))) {
+    require('../dbcon.php');
+    $id = mysqli_real_escape_string($con, $_GET['studentId']);
+  }else {
+    header("location: ../index.html");
+  }
+?>
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
   <head>
@@ -5,6 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/bootstrap.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
     <link rel="stylesheet" href="../css/admin_dashbord.css" />
     <link
       rel="stylesheet"
@@ -138,26 +147,26 @@
       </aside>
       <main>
         <div>
-          <h3 class="text-primary text-center mt-3">قائمة الطلبة</h3>
+          <h3 class="text-primary text-center mt-3">أرشيف الطالب</h3>
         </div>
         <div class="mt-3 mx-5">
         <button
             type="button"
             class="btn btn-outline-primary"
             data-bs-toggle="modal"
-            data-bs-target="#addStudentModal"
+            data-bs-target="#addFundModal"
           >
-            إضافة طالب
+            إضافة إختبار
         </button>
         <div class="mt-4">
           <table class="table table-hover" id="table">
             <thead>
               <tr>
-                <th scope="col">الاسم</th>
-                <th class="col">اللقب</th>
-                <th class="col">الهاتف</th>
+                <th class="col">المادة</th>
+                <th class="col">العلامة</th>
+                <th class="col">تاريخ</th>
                 <th class="col-1">
-                  <p class="d-none d-md-block mb-0">تعديل/معاينة/حذف</p>
+                  <p class="d-none d-md-block mb-0">تعديل/حذف</p>
                   <p class="d-md-none mb-0">فعل</p>
                 </th>
               </tr>
@@ -165,37 +174,29 @@
             <tbody>
               <?php
                 require("../dbcon.php");
-                $sql = "SELECT * FROM `user` WHERE role = 'student'";
+                $sql = "SELECT * FROM `funds` WHERE donner_id = '$id'";
                 $run = mysqli_query($con, $sql);
                 while($row = mysqli_fetch_assoc($run)){
               ?>
               <tr>
-                <td class="align-middle"><?php echo $row['fname'] ?></td>
-                <td class="align-middle"><?php echo $row['lname'] ?></td>
-                <td class="align-middle"><?php echo $row['phone'] ?></td>
+                <td class="align-middle"><?php echo $row['id'] ?></td>
+                <td class="align-middle"><?php echo $row['fund'] ?></td>
+                <td class="align-middle"><?php echo date("Y-m-d",strtotime($row['date'])) ?></td>
                 <td class="d-md-flex d-sm-inline-block justify-content-around">
                   <button
                     type="button"
                     class="btn btn-outline-primary btn-sm editBtn"
                     data-bs-toggle="modal"
-                    data-bs-target="#editStudentModal"
+                    data-bs-target="#editFundModal"
                     value="<?php echo $row['id'] ?>"
                   >
                     <i class="far fa-edit"></i>
                   </button>
-                  <a
-                    type="button"
-                    href="studentview.php?studentId=<?php echo $row['id'] ?>"
-                    class="btn btn-outline-success btn-sm viewBtn"
-                    value="<?php echo $row['id'] ?>"
-                  >
-                    <i class="fas fa-eye"></i>
-                  </a>
                   <button
                     type="button"
                     class="btn btn-outline-danger btn-sm deleteBtn"
                     data-bs-toggle="modal"
-                    data-bs-target="#deleteStudentModal"
+                    data-bs-target="#deleteFundModal"
                     value="<?php echo $row['id'] ?>"
                   >
                   <i class="fas fa-trash-alt"></i>
@@ -210,12 +211,12 @@
         </div>
       </main>
       <div class="mOdels">
-          <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="addFundModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">
-                    إضافة طالب
+                    إضافة إختبار
                   </h1>
                   <button
                     type="button"
@@ -225,47 +226,20 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <form id="addDonner">
-                    <label class="form-label donnerFnameLable">اسم الطالب</label>
+                  <form id="addFunds">
+                    <input type="text" class="d-none" name="donnerId" value="<?php echo $id ?>">
+                    <label class="form-label fundAddedLable">المادة</label>
                     <input
                       type="text"
-                      name="donnerFname"
-                      class="form-control donnerFname"
+                      name="fundAdded"
+                      class="form-control fundAdded"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label donnerLnameLable">لقب الطالب</label>
+                    <label class="form-label fundAddedLable">العلامة</label>
                     <input
                       type="text"
-                      name="donnerLname"
-                      class="form-control donnerLname"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label donerPhoneLable">هاتف الطالب</label>
-                    <input
-                      type="text"
-                      name="donnerPhone"
-                      class="form-control donnerPhone"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label donnerFundsLable">القسم</label>
-                    <input
-                      type="text"
-                      name="donnerFunds"
-                      class="form-control donnerFunds"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label donerPhoneLable">إسم المستخدم للطالب</label>
-                    <input
-                      type="text"
-                      name="donnerPhone"
-                      class="form-control donnerPhone"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label donnerFundsLable">كلمة السر للطالب</label>
-                    <input
-                      type="text"
-                      name="donnerFunds"
-                      class="form-control donnerFunds"
+                      name="fundAdded"
+                      class="form-control fundAdded"
                       aria-labelledby="passwordHelpBlock"
                     />
                     <div class="modal-footer">
@@ -273,7 +247,7 @@
                         type="submit"
                         name="add"
                         class="btn btn-primary"
-                        value="إضافة طالب"
+                        value="إضافة تبرع"
                       />
                     </div>
                   </form>
@@ -281,12 +255,12 @@
               </div>
             </div>
           </div>
-          <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="editFundModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">
-                    تعديل معلومات الطالب
+                    تعديل معلومات التبرع
                   </h1>
                   <button
                     type="button"
@@ -296,48 +270,13 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <form id="editDonner">
-                    <input type="text" class="d-none editDonnerId" name="editDonnerId">
-                    <label class="form-label editDonnerFnameLable">اسم الطالب</label>
+                  <form id="editFunds">
+                    <input type="text" class="d-none editFundId" name="editFundId">
+                    <label class="form-label editFundsLable">مبلغ التبرع</label>
                     <input
                       type="text"
-                      name="editDonnerFname"
-                      class="form-control editDonnerFname"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label editDonnerLnameLable">لقب الطالب</label>
-                    <input
-                      type="text"
-                      name="editDonnerLname"
-                      class="form-control editDonnerLname"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label editDonerPhoneLable">هاتف الطالب</label>
-                    <input
-                      type="text"
-                      name="editDonnerPhone"
-                      class="form-control editDonnerPhone"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label editDonerPhoneLable">القسم</label>
-                    <input
-                      type="text"
-                      name="editDonnerPhone"
-                      class="form-control editDonnerPhone"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label editDonerPhoneLable">إسم المستخدم للطالب</label>
-                    <input
-                      type="text"
-                      name="editDonnerPhone"
-                      class="form-control editDonnerPhone"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label editDonerPhoneLable">كلمة السر للطالب</label>
-                    <input
-                      type="text"
-                      name="editDonnerPhone"
-                      class="form-control editDonnerPhone"
+                      name="editFundsInput"
+                      class="form-control editFundsInput"
                       aria-labelledby="passwordHelpBlock"
                     />
                     <div class="modal-footer">
@@ -353,12 +292,12 @@
               </div>
             </div>
           </div>
-          <div class="modal fade" id="deleteStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="deleteFundModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">
-                    حذف طالب
+                    حذف تبرع
                   </h1>
                   <button
                     type="button"
@@ -368,11 +307,11 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <input type="text" class="d-none deleteDonnerId" >
-                  <p>هل أنت متأكد من حذف هذا الطالب</p>
+                  <input type="text" class="d-none deleteFundId" >
+                  <p>هل أنت متأكد من حذف هذا التبرع</p>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" id="deleteDonner">
+                  <button type="button" class="btn btn-danger" id="deleteFund">
                     حذف
                   </button>
                 </div>
@@ -383,5 +322,107 @@
     </section>
     <script src="../js/bootstrap.bundle.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script>
+      $(document).on("submit", "#addFunds", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("addFunds", true);
+        $.ajax({
+          type: "POST",
+          url: "code.php",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            let res = jQuery.parseJSON(response);
+            if (res.code == 1) {
+              $(".fundAdded").addClass("border-danger");
+              $(".fundAddedLable").addClass("text-danger");
+            }
+            if (res.code == 200) {
+              $('#addFundModal').modal('hide');                 
+              $('#addFunds')[0].reset();
+              $('#table').load(location.href + " #table");
+              alertify.success(res.message); 
+            }
+            if (res.code == 500) {
+              alert(res.message);
+            }
+          },
+        });
+      });
+      $(document).on('click', '.editBtn', function () {
+        let id = $(this).val();
+        let editId = $('.editFundId').val(id);
+        $.ajax({
+            type: "GET",
+            url: "code.php?edit_fund_id=" + id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                  alert(res.message);
+                }else if(res.code == 200){
+
+                    $('.editFundsInput').val(res.data.fund);
+                    $('#editFundModal').modal('show');
+                }
+            }
+        });
+      });
+      $(document).on("submit", "#editFunds", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("editFunds", true);
+        $.ajax({
+          type: "POST",
+          url: "code.php",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            let res = jQuery.parseJSON(response);
+            if (res.code == 1) {
+              $(".editFundsInput").addClass("border-danger");
+              $(".editFundsLable").addClass("text-danger");
+            }
+            if (res.code == 200) {
+              $('#editFundModal').modal('hide');
+              $('#table').load(location.href + " #table");
+              alertify.success(res.message); 
+            }
+            if(res.code == 404) {
+              alert(res.message);
+            }
+          },
+        });
+      });
+      $(document).on('click', '.deleteBtn', function () {
+        let id = $(this).val();
+        let deleteInput = $('.deleteFundId').val(id);
+      });
+      $(document).on("click", "#deleteFund", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        let id = $('.deleteFundId').val();
+        $.ajax({
+            type: "GET",
+            url: "code.php?deleteFund=" + id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                  alert(res.message);
+                }else if(res.code == 200){
+                    $('#deleteFundModal').modal('hide');
+                    $('#table').load(location.href + " #table");
+                    alertify.success(res.message); 
+                }
+
+            }
+        });
+      });
+    </script>
   </body>
 </html>
