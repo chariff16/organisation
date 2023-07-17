@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/bootstrap.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
     <link rel="stylesheet" href="../css/admin_dashbord.css" />
     <link
       rel="stylesheet"
@@ -225,47 +226,47 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <form id="addDonner">
-                    <label class="form-label donnerFnameLable">اسم الطالب</label>
+                  <form id="addStudent">
+                    <label class="form-label studentFnameLable">اسم الطالب</label>
                     <input
                       type="text"
-                      name="donnerFname"
-                      class="form-control donnerFname"
+                      name="studentFname"
+                      class="form-control studentFname"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label donnerLnameLable">لقب الطالب</label>
+                    <label class="form-label studentLnameLable">لقب الطالب</label>
                     <input
                       type="text"
-                      name="donnerLname"
-                      class="form-control donnerLname"
+                      name="studentLname"
+                      class="form-control studentLname"
                       aria-labelledby="passwordHelpBlock"
                     />
                     <label class="form-label donerPhoneLable">هاتف الطالب</label>
                     <input
                       type="text"
-                      name="donnerPhone"
-                      class="form-control donnerPhone"
+                      name="studentPhone"
+                      class="form-control studentPhone"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label donnerFundsLable">القسم</label>
+                    <label class="form-label studentClassLable">القسم</label>
                     <input
                       type="text"
-                      name="donnerFunds"
-                      class="form-control donnerFunds"
+                      name="studentClass"
+                      class="form-control studentClass"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label donerPhoneLable">إسم المستخدم للطالب</label>
+                    <label class="form-label studentUsernameLable">إسم المستخدم للطالب</label>
                     <input
                       type="text"
-                      name="donnerPhone"
-                      class="form-control donnerPhone"
+                      name="studentUsername"
+                      class="form-control studentUsername"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label donnerFundsLable">كلمة السر للطالب</label>
+                    <label class="form-label studentPasswordLable">كلمة السر للطالب</label>
                     <input
-                      type="text"
-                      name="donnerFunds"
-                      class="form-control donnerFunds"
+                      type="password"
+                      name="studentPassword"
+                      class="form-control studentPassword"
                       aria-labelledby="passwordHelpBlock"
                     />
                     <div class="modal-footer">
@@ -383,5 +384,61 @@
     </section>
     <script src="../js/bootstrap.bundle.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script>
+      $(document).on("submit", "#addStudent", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("addStudent", true);
+        $.ajax({
+          type: "POST",
+          url: "code.php",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            let res = jQuery.parseJSON(response);
+            if (res.code == 1) {
+              if (res.errors.fname) {
+                $(".studentFname").addClass("border-danger");
+                $(".studentFnameLable").addClass("text-danger");
+              }
+              if (res.errors.lname) {
+                $(".studentLname").addClass("border-danger");
+                $(".studentLnameLable").addClass("text-danger");
+              }
+              if (res.errors.phone) {
+                $(".studentPhone").addClass("border-danger");
+                $(".studentPhoneLable").addClass("text-danger");
+              }
+              if (res.errors.username) {
+                $(".studentUsername").addClass("border-danger");
+                $(".studentUsernameLable").addClass("text-danger");
+              }
+              if (res.errors.password) {
+                $(".studentPassword").addClass("border-danger");
+                $(".studentPasswordLable").addClass("text-danger");
+              }
+              if (res.errors.class) {
+                $(".studentClass").addClass("border-danger");
+                $(".studentClassLable").addClass("text-danger");
+              }
+            }
+            if (res.code == 2) {
+              $(".studentUsername").addClass("border-danger");
+              $(".studentUsernameLable").text(res.message);
+              $(".studentUsernameLable").addClass("text-danger");
+            }
+            if (res.code == 200) {
+              $('#addStudentModal').modal('hide');                 
+              $('#addStudent')[0].reset();
+              $('#table').load(location.href + " #table");
+              alertify.success(res.message); 
+            }
+          },
+        });
+      });
+    </script>
   </body>
 </html>
