@@ -426,12 +426,12 @@
             let res = jQuery.parseJSON(response);
             if (res.code == 1) {
               if (res.errors.lname) {
-                $(".editDonnerFname").addClass("border-danger");
-                $(".editDonnerFnameLable").addClass("text-danger");
-              }
-              if (res.errors.fname) {
                 $(".editDonnerLname").addClass("border-danger");
                 $(".editDonnerLnameLable").addClass("text-danger");
+              }
+              if (res.errors.fname) {
+                $(".editDonnerFname").addClass("border-danger");
+                $(".editDonnerFnameLable").addClass("text-danger");
               }
               if (res.errors.phone) {
                 $(".editDonnerPhone").addClass("border-danger");
