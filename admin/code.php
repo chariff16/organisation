@@ -853,3 +853,24 @@
             }
         }
     };
+    if (isset($_GET['deleteExam'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_GET['deleteExam']);
+        $sql = "DELETE FROM `exam` WHERE id = '$id'";
+        $run = mysqli_query($con, $sql);
+        if ($run) {
+            $res = [
+                'code' => 200,
+                'message' => 'تمت حذف الاختبار'
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $res = [
+                'code' => 404,
+                'message' => 'يرجى الإتصال بمطور الموقع'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    };

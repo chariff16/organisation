@@ -314,7 +314,7 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <input type="text" class="d-none deleteFundId" >
+                  <input type="text" class="d-none deleteExamId" >
                   <p>هل أنت متأكد من حذف هذا الاختبار</p>
                 </div>
                 <div class="modal-footer">
@@ -420,21 +420,21 @@
       });
       $(document).on('click', '.deleteBtn', function () {
         let id = $(this).val();
-        let deleteInput = $('.deleteFundId').val(id);
+        let deleteInput = $('.deleteExamId').val(id);
       });
       $(document).on("click", "#deleteFund", function (e) {
         $(".form-control").removeClass("border-danger");
         e.preventDefault();
-        let id = $('.deleteFundId').val();
+        let id = $('.deleteExamId').val();
         $.ajax({
             type: "GET",
-            url: "code.php?deleteFund=" + id,
+            url: "code.php?deleteExam=" + id,
             success: function (response) {
                 var res = jQuery.parseJSON(response);
                 if(res.code == 404) {
                   alert(res.message);
                 }else if(res.code == 200){
-                    $('#deleteFundModal').modal('hide');
+                    $('#deleteExamModal').modal('hide');
                     $('#table').load(location.href + " #table");
                     alertify.success(res.message); 
                 }
