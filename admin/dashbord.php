@@ -369,11 +369,11 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <input type="text" class="d-none deleteDonnerId" >
+                  <input type="text" class="d-none deleteStudentId" >
                   <p>هل أنت متأكد من حذف هذا الطالب</p>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" id="deleteDonner">
+                  <button type="button" class="btn btn-danger" id="deleteStudent">
                     حذف
                   </button>
                 </div>
@@ -499,6 +499,7 @@
             }
             if (res.code == 200) {
               $('#editStudentModal').modal('hide');
+              $('#editStudent')[0].reset();
               $('#table').load(location.href + " #table");
               alertify.success(res.message); 
             }
@@ -506,6 +507,30 @@
               alert(res.message);
             }
           },
+        });
+      });
+      $(document).on('click', '.deleteBtn', function () {
+        let id = $(this).val();
+        let deleteInput = $('.deleteStudentId').val(id);
+      });
+      $(document).on("click", "#deleteStudent", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        let id = $('.deleteStudentId').val();
+        $.ajax({
+            type: "GET",
+            url: "code.php?deleteStudent=" + id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                  alert(res.message);
+                }else if(res.code == 200){
+                    $('#deleteStudentModal').modal('hide');
+                    $('#table').load(location.href + " #table");
+                    alertify.success(res.message); 
+                }
+
+            }
         });
       });
     </script>
