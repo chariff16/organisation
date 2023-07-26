@@ -154,7 +154,7 @@
             type="button"
             class="btn btn-outline-primary"
             data-bs-toggle="modal"
-            data-bs-target="#addFundModal"
+            data-bs-target="#addExamModal"
           >
             إضافة إختبار
         </button>
@@ -174,20 +174,20 @@
             <tbody>
               <?php
                 require("../dbcon.php");
-                $sql = "SELECT * FROM `funds` WHERE donner_id = '$id'";
+                $sql = "SELECT * FROM `exam` WHERE studentid = '$id'";
                 $run = mysqli_query($con, $sql);
                 while($row = mysqli_fetch_assoc($run)){
               ?>
               <tr>
-                <td class="align-middle"><?php echo $row['id'] ?></td>
-                <td class="align-middle"><?php echo $row['fund'] ?></td>
+                <td class="align-middle"><?php echo $row['class'] ?></td>
+                <td class="align-middle"><?php echo $row['grades'] ?></td>
                 <td class="align-middle"><?php echo date("Y-m-d",strtotime($row['date'])) ?></td>
                 <td class="d-md-flex d-sm-inline-block justify-content-around">
                   <button
                     type="button"
                     class="btn btn-outline-primary btn-sm editBtn"
                     data-bs-toggle="modal"
-                    data-bs-target="#editFundModal"
+                    data-bs-target="#editExamModal"
                     value="<?php echo $row['id'] ?>"
                   >
                     <i class="far fa-edit"></i>
@@ -196,7 +196,7 @@
                     type="button"
                     class="btn btn-outline-danger btn-sm deleteBtn"
                     data-bs-toggle="modal"
-                    data-bs-target="#deleteFundModal"
+                    data-bs-target="#deleteExamModal"
                     value="<?php echo $row['id'] ?>"
                   >
                   <i class="fas fa-trash-alt"></i>
@@ -211,7 +211,7 @@
         </div>
       </main>
       <div class="mOdels">
-          <div class="modal fade" id="addFundModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="addExamModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
@@ -226,20 +226,20 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <form id="addFunds">
-                    <input type="text" class="d-none" name="donnerId" value="<?php echo $id ?>">
-                    <label class="form-label fundAddedLable">المادة</label>
+                  <form id="addExam">
+                    <input type="text" class="d-none" name="studentId" value="<?php echo $id ?>">
+                    <label class="form-label classAddedLable">المادة</label>
                     <input
                       type="text"
-                      name="fundAdded"
-                      class="form-control fundAdded"
+                      name="classAdded"
+                      class="form-control classAdded"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label fundAddedLable">العلامة</label>
+                    <label class="form-label gradeAddedLable">العلامة</label>
                     <input
                       type="text"
-                      name="fundAdded"
-                      class="form-control fundAdded"
+                      name="gradeAdded"
+                      class="form-control gradeAdded"
                       aria-labelledby="passwordHelpBlock"
                     />
                     <div class="modal-footer">
@@ -247,7 +247,7 @@
                         type="submit"
                         name="add"
                         class="btn btn-primary"
-                        value="إضافة تبرع"
+                        value="إضافة إختبار"
                       />
                     </div>
                   </form>
@@ -255,12 +255,12 @@
               </div>
             </div>
           </div>
-          <div class="modal fade" id="editFundModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="editExamModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">
-                    تعديل معلومات التبرع
+                    تعديل معلومات الاختبار
                   </h1>
                   <button
                     type="button"
@@ -270,13 +270,20 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <form id="editFunds">
-                    <input type="text" class="d-none editFundId" name="editFundId">
-                    <label class="form-label editFundsLable">مبلغ التبرع</label>
+                  <form id="editExam">
+                    <input type="text" class="d-none editFundId" name="editExamId">
+                    <label class="form-label editClassLable">المادة</label>
                     <input
                       type="text"
-                      name="editFundsInput"
-                      class="form-control editFundsInput"
+                      name="editClass"
+                      class="form-control editClass"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label editGradeLable">العلامة</label>
+                    <input
+                      type="text"
+                      name="editGrade"
+                      class="form-control editGrade"
                       aria-labelledby="passwordHelpBlock"
                     />
                     <div class="modal-footer">
@@ -292,12 +299,12 @@
               </div>
             </div>
           </div>
-          <div class="modal fade" id="deleteFundModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="deleteExamModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">
-                    حذف تبرع
+                    حذف الاختبار
                   </h1>
                   <button
                     type="button"
@@ -308,7 +315,7 @@
                 </div>
                 <div class="modal-body">
                   <input type="text" class="d-none deleteFundId" >
-                  <p>هل أنت متأكد من حذف هذا التبرع</p>
+                  <p>هل أنت متأكد من حذف هذا الاختبار</p>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-danger" id="deleteFund">
@@ -324,11 +331,11 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script>
-      $(document).on("submit", "#addFunds", function (e) {
+      $(document).on("submit", "#addExam", function (e) {
         $(".form-control").removeClass("border-danger");
         e.preventDefault();
         var formData = new FormData(this);
-        formData.append("addFunds", true);
+        formData.append("addExam", true);
         $.ajax({
           type: "POST",
           url: "code.php",
@@ -338,12 +345,18 @@
           success: function (response) {
             let res = jQuery.parseJSON(response);
             if (res.code == 1) {
-              $(".fundAdded").addClass("border-danger");
-              $(".fundAddedLable").addClass("text-danger");
+              if (res.errors.class) {
+                $(".classAdded").addClass("border-danger");
+                $(".classAddedLable").addClass("text-danger");
+              }
+              if (res.errors.grade) {
+                $(".gradeAdded").addClass("border-danger");
+                $(".gradeAddedLable").addClass("text-danger");
+              }
             }
             if (res.code == 200) {
-              $('#addFundModal').modal('hide');                 
-              $('#addFunds')[0].reset();
+              $('#addExamModal').modal('hide');                 
+              $('#addExam')[0].reset();
               $('#table').load(location.href + " #table");
               alertify.success(res.message); 
             }
@@ -355,27 +368,27 @@
       });
       $(document).on('click', '.editBtn', function () {
         let id = $(this).val();
-        let editId = $('.editFundId').val(id);
+        let editId = $('.editExamId').val(id);
         $.ajax({
             type: "GET",
-            url: "code.php?edit_fund_id=" + id,
+            url: "code.php?edit_exam_id=" + id,
             success: function (response) {
                 var res = jQuery.parseJSON(response);
                 if(res.code == 404) {
                   alert(res.message);
                 }else if(res.code == 200){
-
-                    $('.editFundsInput').val(res.data.fund);
-                    $('#editFundModal').modal('show');
+                    $('.editClass').val(res.data.class);
+                    $('.editGrade').val(res.data.grades);
+                    $('#editExamModal').modal('show');
                 }
             }
         });
       });
-      $(document).on("submit", "#editFunds", function (e) {
+      $(document).on("submit", "#editExam", function (e) {
         $(".form-control").removeClass("border-danger");
         e.preventDefault();
         var formData = new FormData(this);
-        formData.append("editFunds", true);
+        formData.append("editExam", true);
         $.ajax({
           type: "POST",
           url: "code.php",
@@ -385,11 +398,17 @@
           success: function (response) {
             let res = jQuery.parseJSON(response);
             if (res.code == 1) {
-              $(".editFundsInput").addClass("border-danger");
-              $(".editFundsLable").addClass("text-danger");
+              if (res.errors.class) {
+                $(".editClass").addClass("border-danger");
+                $(".editClassLable").addClass("text-danger");
+              }
+              if (res.errors.grade) {
+                $(".editGrade").addClass("border-danger");
+                $(".editGradeLable").addClass("text-danger");
+              }
             }
             if (res.code == 200) {
-              $('#editFundModal').modal('hide');
+              $('#editExamModal').modal('hide');
               $('#table').load(location.href + " #table");
               alertify.success(res.message); 
             }
