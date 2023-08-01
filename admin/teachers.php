@@ -139,12 +139,288 @@
       </aside>
       <main>
         <div>
-          <h3 class="text-primary text-center mt-3">ادارة الحسابات اﻷساتذة</h3>
+          <h3 class="text-primary text-center mt-3">قائمة الأساتذة</h3>
         </div>
+        <div class="mt-3 mx-5">
+        <button
+            type="button"
+            class="btn btn-outline-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#addTeacherModal"
+          >
+            إضافة أستاذ
+        </button>
         <div class="mt-4">
-          <p class="text-center">here the view of the teachers dashbord</p>
+          <table class="table table-hover" id="table">
+            <thead>
+              <tr>
+                <th scope="col">الاسم</th>
+                <th class="col">اللقب</th>
+                <th class="col">الهاتف</th>
+                <th class="col-1">
+                  <p class="d-none d-md-block mb-0">تعديل/معاينة/حذف</p>
+                  <p class="d-md-none mb-0">فعل</p>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+                require("../dbcon.php");
+                $sql = "SELECT * FROM `user` WHERE role = 'teacher'";
+                $run = mysqli_query($con, $sql);
+                while($row = mysqli_fetch_assoc($run)){
+              ?>
+              <tr>
+                <td class="align-middle"><?php echo $row['fname'] ?></td>
+                <td class="align-middle"><?php echo $row['lname'] ?></td>
+                <td class="align-middle"><?php echo $row['phone'] ?></td>
+                <td class="d-md-flex d-sm-inline-block justify-content-around">
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary btn-sm editBtn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editTeacherModal"
+                    value="<?php echo $row['id'] ?>"
+                  >
+                    <i class="far fa-edit"></i>
+                  </button>
+                  <a
+                    type="button"
+                    class="btn btn-outline-success btn-sm viewBtn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#viewTeacherModal"
+                    value="<?php echo $row['id'] ?>"
+                  >
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger btn-sm deleteBtn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteTeacherModal"
+                    value="<?php echo $row['id'] ?>"
+                  >
+                  <i class="fas fa-trash-alt"></i>
+                  </button>
+                </td>
+              </tr>
+              <?php
+                }
+              ?>
+            </tbody>
+          </table>
         </div>
       </main>
+      <div class="mOdels">
+          <div class="modal fade" id="addTeacherModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    إضافة أستاذ
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <form id="addTeacher">
+                    <label class="form-label teacherFnameLable">اسم أستاذ</label>
+                    <input
+                      type="text"
+                      name="teacherFname"
+                      class="form-control teacherFname"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label teacherLnameLable">لقب أستاذ</label>
+                    <input
+                      type="text"
+                      name="teacherLname"
+                      class="form-control teacherLname"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label teacherPhoneLable">هاتف أستاذ</label>
+                    <input
+                      type="text"
+                      name="teacherPhone"
+                      class="form-control teacherPhone"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label teacherClassLable">القسم</label>
+                    <input
+                      type="text"
+                      name="teacherClass"
+                      class="form-control teacherClass"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label teacherUsernameLable">إسم المستخدم الأستاذ</label>
+                    <input
+                      type="text"
+                      name="teacherUsername"
+                      class="form-control teacherUsername"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label teacherPasswordLable">كلمة السر الأستاذ</label>
+                    <input
+                      type="password"
+                      name="teacherPassword"
+                      class="form-control teacherPassword"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <div class="modal-footer">
+                      <input
+                        type="submit"
+                        name="add"
+                        class="btn btn-primary"
+                        value="إضافة أستاذ"
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="editTeacherModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    تعديل معلومات لأستاذ
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <form id="addTeacher">
+                    <label class="form-label teacherFnameLable">اسم أستاذ</label>
+                    <input
+                      type="text"
+                      name="teacherFname"
+                      class="form-control teacherFname"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label teacherLnameLable">لقب أستاذ</label>
+                    <input
+                      type="text"
+                      name="teacherLname"
+                      class="form-control teacherLname"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label teacherPhoneLable">هاتف أستاذ</label>
+                    <input
+                      type="text"
+                      name="teacherPhone"
+                      class="form-control teacherPhone"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label teacherClassLable">القسم</label>
+                    <input
+                      type="text"
+                      name="teacherClass"
+                      class="form-control teacherClass"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label teacherUsernameLable">إسم المستخدم الأستاذ</label>
+                    <input
+                      type="text"
+                      name="teacherUsername"
+                      class="form-control teacherUsername"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <label class="form-label teacherPasswordLable">كلمة السر الأستاذ</label>
+                    <input
+                      type="password"
+                      name="teacherPassword"
+                      class="form-control teacherPassword"
+                      aria-labelledby="passwordHelpBlock"
+                    />
+                    <div class="modal-footer">
+                      <input
+                        type="submit"
+                        name="add"
+                        class="btn btn-primary"
+                        value="إضافة أستاذ"
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="viewTeacherModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    معاينة معلومات الأساتذ
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div class="d-flex">
+                    <p class="col-2">إسم الأستاذ</p>
+                    <p class="col fw-bold mx-3 viewTeacherFname">محمد</p>
+                  </div>
+                  <div class="d-flex">
+                    <p class="col-2">لقب الأستاذ</p>
+                    <p class="col fw-bold mx-3 viewTeacherLname">محمد</p>
+                  </div>
+                  <div class="d-flex">
+                    <p class="col-2">قسم</p>
+                    <p class="col fw-bold mx-3 viewTeacherClass">محمد</p>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    إغلاق
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="deleteTeacherModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    حذف الأستاذ
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <input type="text" class="d-none deleteTeacherId" >
+                  <p>هل أنت متأكد من حذف هذا الأساتذ</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" id="deleteTeacher">
+                    حذف
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
     </section>
     <script src="../js/bootstrap.bundle.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
