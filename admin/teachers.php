@@ -299,47 +299,48 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <form id="addTeacher">
-                    <label class="form-label teacherFnameLable">اسم أستاذ</label>
+                  <form id="editTeacher">
+                    <input type="text" class="d-none editId" name="editTeacherId">
+                    <label class="form-label editTeacherFnameLable">اسم أستاذ</label>
                     <input
                       type="text"
-                      name="teacherFname"
-                      class="form-control teacherFname"
+                      name="editTeacherFname"
+                      class="form-control editTeacherFname"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label teacherLnameLable">لقب أستاذ</label>
+                    <label class="form-label editTeacherLnameLable">لقب أستاذ</label>
                     <input
                       type="text"
-                      name="teacherLname"
-                      class="form-control teacherLname"
+                      name="editTeacherLname"
+                      class="form-control editTeacherLname"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label teacherPhoneLable">هاتف أستاذ</label>
+                    <label class="form-label editTeacherPhoneLable">هاتف أستاذ</label>
                     <input
                       type="text"
-                      name="teacherPhone"
-                      class="form-control teacherPhone"
+                      name="editTeacherPhone"
+                      class="form-control editTeacherPhone"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label teacherClassLable">القسم</label>
+                    <label class="form-label editTeacherClassLable">القسم</label>
                     <input
                       type="text"
-                      name="teacherClass"
-                      class="form-control teacherClass"
+                      name="editTeacherClass"
+                      class="form-control editTeacherClass"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label teacherUsernameLable">إسم المستخدم الأستاذ</label>
+                    <label class="form-label editTeacherUsernameLable">إسم المستخدم الأستاذ</label>
                     <input
                       type="text"
-                      name="teacherUsername"
-                      class="form-control teacherUsername"
+                      name="editTeacherUsername"
+                      class="form-control editTeacherUsername"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label teacherPasswordLable">كلمة السر الأستاذ</label>
+                    <label class="form-label editTeacherPasswordLable">كلمة السر الأستاذ</label>
                     <input
                       type="password"
-                      name="teacherPassword"
-                      class="form-control teacherPassword"
+                      name="editTeacherPassword"
+                      class="form-control editTeacherPassword"
                       aria-labelledby="passwordHelpBlock"
                     />
                     <div class="modal-footer">
@@ -347,7 +348,7 @@
                         type="submit"
                         name="add"
                         class="btn btn-primary"
-                        value="إضافة أستاذ"
+                        value="تعديل المعلومات"
                       />
                     </div>
                   </form>
@@ -481,29 +482,32 @@
         });
       });
       $(document).on('click', '.editBtn', function () {
-        let post_id = $(this).val();
-        let editId = $('.editId').val(post_id);
+        let teacher_id = $(this).val();
+        let editId = $('.editId').val(teacher_id);
+        console.log(editId.val());
         $.ajax({
             type: "GET",
-            url: "code.php?edit_post_id=" + post_id,
+            url: "code.php?edit_teacher_id=" + teacher_id,
             success: function (response) {
                 var res = jQuery.parseJSON(response);
                 if(res.code == 404) {
                   alert(res.message);
                 }else if(res.code == 200){
-
-                    $('.editPostTitel').val(res.data.titel);
-                    $('.editPostInput').val(res.data.post);
+                    $('.teacherFname').val(res.data.fname);
+                    $('.teacherLname').val(res.data.lname);
+                    $('.teacherUsername').val(res.data.username);
+                    $('.teacherClass').val(res.data.group);
+                    $('.teacherPhone').val(res.data.phone);
                     $('#editPostModal').modal('show');
                 }
             }
         });
       });
-      $(document).on("submit", "#editPost", function (e) {
+      $(document).on("submit", "#editTeacher", function (e) {
         $(".form-control").removeClass("border-danger");
         e.preventDefault();
         var formData = new FormData(this);
-        formData.append("editPost", true);
+        formData.append("editTeacher", true);
         $.ajax({
           type: "POST",
           url: "code.php",
@@ -513,17 +517,29 @@
           success: function (response) {
             let res = jQuery.parseJSON(response);
             if (res.code == 1) {
-              if (res.errors.title) {
-                $(".editPostTitel").addClass("border-danger");
-                $(".editTitelLable").addClass("text-danger");
+              if (res.errors.fname) {
+                $(".editTeacherFname").addClass("border-danger");
+                $(".editTeacherFnameLable").addClass("text-danger");
               }
-              if (res.errors.post) {
-                $(".editPostInput").addClass("border-danger");
-                $(".editPostLable").addClass("text-danger");
+              if (res.errors.lname) {
+                $(".editTeacherLname").addClass("border-danger");
+                $(".editTeacherLnameLable").addClass("text-danger");
+              }
+              if (res.errors.phone) {
+                $(".editTeacherPhone").addClass("border-danger");
+                $(".editTeacherPhoneLable").addClass("text-danger");
+              }
+              if (res.errors.class) {
+                $(".editTeacherClass").addClass("border-danger");
+                $(".editTeacherClassLable").addClass("text-danger");
+              }
+              if (res.errors.username) {
+                $(".editTeacherUsername").addClass("border-danger");
+                $(".editTeacherUsernameLable").addClass("text-danger");
               }
             }
             if (res.code == 200) {
-              $('#editPostModal').modal('hide');
+              $('#editTeacherModal').modal('hide');
               $('#table').load(location.href + " #table");
               alertify.success(res.message); 
             }

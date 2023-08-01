@@ -932,3 +932,81 @@
             }
         }
     };
+    if (isset($_GET['edit_teacher_id'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_GET['edit_teacher_id']);
+        $sql = "SELECT * FROM `user` WHERE id = '$id'";
+        $run = mysqli_query($con, $sql);
+        if ($row = mysqli_fetch_assoc($run)) {
+            $res = [
+                'code' => 200,
+                'message' => 'تمت إضافة الاختبار',
+                'data' => $row
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $res = [
+                'code' => 404,
+                'message' => 'يرجى الإتصال بمطور الموقع'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    };
+    if (isset($_POST['editTeacher'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_POST['editTeacherId']);
+        $fname = mysqli_real_escape_string($con, $_POST['editTeacherFname']);
+        $lname = mysqli_real_escape_string($con, $_POST['editTeacherLname']);
+        $username = mysqli_real_escape_string($con, $_POST['editTeacherUsername']);
+        $password = mysqli_real_escape_string($con, $_POST['editTeacherPassword']);
+        $phone = mysqli_real_escape_string($con, $_POST['editTeacherPhone']);
+        $class = mysqli_real_escape_string($con, $_POST['editTeacherClass']);
+        $errors = array();
+        if ($fname == NULL || $lname == NULL || $username == NULL || $phone == NULL || $class == NULL) {
+            if ($fname == NULL) {
+                $errors['fname'] = 'Field 1 is required';
+            }
+            if ($lname == NULL) {
+                $errors['lname'] = 'Field 2 is required';
+            }
+            if ($username == NULL) {
+                $errors['username'] = 'Field 3 is required';
+            }
+            if ($phone == NULL) {
+                $errors['phone'] = 'Field 4 is required';
+            }
+            if ($class == NULL) {
+                $errors['class'] = 'Field 5 is required';
+            }
+            $res = [
+                'code' => 1,
+                'message' => 'يرجى إدخال جميع المعلومات',
+                'errors' => $errors 
+            ];
+            echo json_encode($res);
+            return ;
+        }else if ($password == NULL) {
+            $sql = "UPDATE `user` SET `username`='$username',`fname`='$fname',`lname`='$lname',`phone`='$phone',`role`='teacher',`group`='$class' WHERE id = '$id'";
+            $run = mysqli_query($con, $sql);
+            if ($run) {
+                $res = [
+                    'code' => 200,
+                    'message' => 'تم تحديث المعلومات'
+                ];
+                echo json_encode($res);
+            }
+        }else {
+            $hpassword = password_hash($password, PASSWORD_DEFAULT);
+            $sql = "UPDATE `user` SET `username`='$username',`fname`='$fname',`lname`='$lname',`phone`='$phone',`password`='$hpassword',`role`='teacher',`group`='$class' WHERE id = '$id'";
+            $run = mysqli_query($con, $sql);
+            if ($run) {
+                $res = [
+                    'code' => 200,
+                    'message' => 'تم تحديث المعلومات'
+                ];
+                echo json_encode($res);
+            }
+        }
+    };
