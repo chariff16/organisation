@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/bootstrap.css" />
     <link rel="stylesheet" href="../css/admin_dashbord.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
@@ -424,5 +425,156 @@
     </section>
     <script src="../js/bootstrap.bundle.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script>
+      $(document).on("submit", "#addTeacher", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("addTeacher", true);
+        $.ajax({
+          type: "POST",
+          url: "code.php",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            let res = jQuery.parseJSON(response);
+            if (res.code == 1) {
+              if (res.errors.fname) {
+                $(".teacherFname").addClass("border-danger");
+                $(".teacherFnameLable").addClass("text-danger");
+              }
+              if (res.errors.lname) {
+                $(".teacherLname").addClass("border-danger");
+                $(".teacherLnameLable").addClass("text-danger");
+              }
+              if (res.errors.username) {
+                $(".teacherUsername").addClass("border-danger");
+                $(".teacherUsernameLable").addClass("text-danger");
+              }
+              if (res.errors.password) {
+                $(".teacherPassword").addClass("border-danger");
+                $(".teacherPasswordLable").addClass("text-danger");
+              }
+              if (res.errors.class) {
+                $(".teacherClass").addClass("border-danger");
+                $(".teacherClassLable").addClass("text-danger");
+              }
+              if (res.errors.phone) {
+                $(".teacherPhone").addClass("border-danger");
+                $(".teacherPhoneLable").addClass("text-danger");
+              }
+            }
+            if (res.code == 2) {
+                $(".teacherUsername").addClass("border-danger");
+                $(".teacherUsernameLable").addClass("text-danger");
+                $(".studentUsernameLable").text(res.message);
+            }
+            if (res.code == 200) {
+              $('#addTeacherModal').modal('hide');                 
+              $('#addTeacher')[0].reset();
+              $('#table').load(location.href + " #table");
+              alertify.success(res.message); 
+            }
+          },
+        });
+      });
+      $(document).on('click', '.editBtn', function () {
+        let post_id = $(this).val();
+        let editId = $('.editId').val(post_id);
+        $.ajax({
+            type: "GET",
+            url: "code.php?edit_post_id=" + post_id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                  alert(res.message);
+                }else if(res.code == 200){
+
+                    $('.editPostTitel').val(res.data.titel);
+                    $('.editPostInput').val(res.data.post);
+                    $('#editPostModal').modal('show');
+                }
+            }
+        });
+      });
+      $(document).on("submit", "#editPost", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        var formData = new FormData(this);
+        formData.append("editPost", true);
+        $.ajax({
+          type: "POST",
+          url: "code.php",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            let res = jQuery.parseJSON(response);
+            if (res.code == 1) {
+              if (res.errors.title) {
+                $(".editPostTitel").addClass("border-danger");
+                $(".editTitelLable").addClass("text-danger");
+              }
+              if (res.errors.post) {
+                $(".editPostInput").addClass("border-danger");
+                $(".editPostLable").addClass("text-danger");
+              }
+            }
+            if (res.code == 200) {
+              $('#editPostModal').modal('hide');
+              $('#table').load(location.href + " #table");
+              alertify.success(res.message); 
+            }
+            if(res.code == 404) {
+              alert(res.message);
+            }
+          },
+        });
+      });
+      $(document).on('click', '.viewBtn', function () {
+        let account_id = $(this).val();
+        $.ajax({
+            type: "GET",
+            url: "code.php?view_post_id=" + account_id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                alert(res.message);
+                }else if(res.code == 200){
+                    $('.viewPostTitel').text(res.data.titel);
+                    $('.viewPostInput').text(res.data.post);
+                    $('#viewModal').modal('show');
+                }
+
+            }
+        });
+      });
+      $(document).on('click', '.deleteBtn', function () {
+        let account_id = $(this).val();
+        let deleteInput = $('.deleteId').val(account_id);
+      });
+      $(document).on("click", "#deletePost", function (e) {
+        $(".form-control").removeClass("border-danger");
+        e.preventDefault();
+        let account_id = $('.deleteId').val();
+        $.ajax({
+            type: "GET",
+            url: "code.php?deletePost=" + account_id,
+            success: function (response) {
+                var res = jQuery.parseJSON(response);
+                if(res.code == 404) {
+                  alert(res.message);
+                }else if(res.code == 200){
+                    $('#deletePostModal').modal('hide');
+                    $('#table').load(location.href + " #table");
+                    alertify.success(res.message); 
+                }
+
+            }
+        });
+      });
+    </script>
   </body>
 </html>

@@ -874,3 +874,61 @@
             return ;
         }
     };
+    if (isset($_POST['addTeacher'])) {
+        require('../dbcon.php');
+        $fname = mysqli_real_escape_string($con, $_POST['teacherFname']);
+        $lname = mysqli_real_escape_string($con, $_POST['teacherLname']);
+        $username = mysqli_real_escape_string($con, $_POST['teacherUsername']);
+        $password = mysqli_real_escape_string($con, $_POST['teacherPassword']);
+        $phone = mysqli_real_escape_string($con, $_POST['teacherPhone']);
+        $class = mysqli_real_escape_string($con, $_POST['teacherClass']);
+        $errors = array();
+        if ($fname == NULL || $lname == NULL || $username == NULL || $password == NULL ||$phone == NULL || $class == NULL ) {
+            if ($fname == NULL) {
+                $errors['fname'] = 'Field 1 is required';
+            }
+            if ($lname == NULL) {
+                $errors['lname'] = 'Field 2 is required';
+            }
+            if ($username == NULL) {
+                $errors['username'] = 'Field 3 is required';
+            }
+            if ($password == NULL) {
+                $errors['password'] = 'Field 4 is required';
+            }
+            if ($phone == NULL) {
+                $errors['phone'] = 'Field 5 is required';
+            }
+            if ($class == NULL) {
+                $errors['class'] = 'Field 6 is required';
+            }
+            $res = [
+                'code' => 1,
+                'message' => 'يرجى إدخال جميع المعلومات',
+                'errors' => $errors 
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $sql = "SELECT * FROM `user` WHERE username = '$username'";
+            $run = mysqli_query($con, $sql);
+            if (mysqli_num_rows($run) > 0) {
+                $res = [
+                    'code' => 2,
+                    'message' => 'يرجى تغير إسم المستخدم'
+                ];
+                echo json_encode($res);
+                return ;
+            }else {
+                $hpassword = password_hash($password, PASSWORD_DEFAULT);
+                $sql = "INSERT INTO `user`(`id`, `username`, `fname`, `lname`, `phone`, `password`, `role`, `group`) VALUES (NULL ,'$username','$fname','$lname','$phone','$hpassword','teacher','$class')";
+                $run = mysqli_query($con, $sql);
+                $res = [
+                    'code' => 200,
+                    'message' => 'تمت إضافة أستاذ'
+                ];
+                echo json_encode($res);
+                return ;
+            }
+        }
+    };
