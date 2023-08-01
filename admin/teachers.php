@@ -380,9 +380,18 @@
                     <p class="col fw-bold mx-3 viewTeacherLname">محمد</p>
                   </div>
                   <div class="d-flex">
+                    <p class="col-2">هاتف أستاذ</p>
+                    <p class="col fw-bold mx-3 viewTeacherPhone">محمد</p>
+                  </div>
+                  <div class="d-flex">
+                    <p class="col-2">إسم المستخدم للأستاذ</p>
+                    <p class="col fw-bold mx-3 align-self-center viewTeacherUsername">محمد</p>
+                  </div>
+                  <div class="d-flex">
                     <p class="col-2">قسم</p>
                     <p class="col fw-bold mx-3 viewTeacherClass">محمد</p>
                   </div>
+                  
                 </div>
                 <div class="modal-footer">
                   <button
@@ -550,17 +559,20 @@
         });
       });
       $(document).on('click', '.viewBtn', function () {
-        let account_id = $(this).val();
+        let account_id = $(this).attr("value");
         $.ajax({
             type: "GET",
-            url: "code.php?view_post_id=" + account_id,
+            url: "code.php?view_teacher_id=" + account_id,
             success: function (response) {
                 var res = jQuery.parseJSON(response);
                 if(res.code == 404) {
                 alert(res.message);
                 }else if(res.code == 200){
-                    $('.viewPostTitel').text(res.data.titel);
-                    $('.viewPostInput').text(res.data.post);
+                    $('.viewTeacherFname').text(res.data.fname);
+                    $('.viewTeacherLname').text(res.data.lname);
+                    $('.viewTeacherPhone').text(res.data.phone);
+                    $('.viewTeacherClass').text(res.data.group);
+                    $('.viewTeacherUsername').text(res.data.username);
                     $('#viewModal').modal('show');
                 }
 
@@ -569,21 +581,21 @@
       });
       $(document).on('click', '.deleteBtn', function () {
         let account_id = $(this).val();
-        let deleteInput = $('.deleteId').val(account_id);
+        let deleteInput = $('.deleteTeacherId').val(account_id);
       });
-      $(document).on("click", "#deletePost", function (e) {
+      $(document).on("click", "#deleteTeacher", function (e) {
         $(".form-control").removeClass("border-danger");
         e.preventDefault();
-        let account_id = $('.deleteId').val();
+        let account_id = $('.deleteTeacherId').val();
         $.ajax({
             type: "GET",
-            url: "code.php?deletePost=" + account_id,
+            url: "code.php?deleteTeacher=" + account_id,
             success: function (response) {
                 var res = jQuery.parseJSON(response);
                 if(res.code == 404) {
                   alert(res.message);
                 }else if(res.code == 200){
-                    $('#deletePostModal').modal('hide');
+                    $('#deleteTeacherModal').modal('hide');
                     $('#table').load(location.href + " #table");
                     alertify.success(res.message); 
                 }

@@ -1010,3 +1010,47 @@
             }
         }
     };
+    if (isset($_GET['view_teacher_id'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_GET['view_teacher_id']);
+        $sql = "SELECT * FROM `user` WHERE id = '$id'";
+        $run = mysqli_query($con, $sql);
+        if ($row = mysqli_fetch_assoc($run)) {
+            $res = [
+                'code' => 200,
+                'message' => 'تمت إضافة عضو',
+                'data' => $row
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $res = [
+                'code' => 404,
+                'message' => 'يرجى الإتصال بمطور الموقع'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    };
+    if (isset($_GET['deleteTeacher'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_GET['deleteTeacher']);
+        $sql = "DELETE FROM `user` WHERE id = '$id'";
+        $run = mysqli_query($con, $sql);
+        if ($run) {
+            $res = [
+                'code' => 200,
+                'message' => 'تمت حذف الأستاذ',
+                'data' => $row
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $res = [
+                'code' => 404,
+                'message' => 'يرجى الإتصال بمطور الموقع'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    };
