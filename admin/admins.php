@@ -103,7 +103,7 @@
 
       <a
         href="#"
-        class="btn btn-outline-light m-0 fs-6"
+        class="btn btn-outline-light m-0 fs-6 logoutBtn"
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
         >تسجيل الخروج</a
@@ -622,6 +622,23 @@
                 }
 
             }
+        });
+      });
+      $(document).ready(function() {
+        $(".logoutBtn").click(function() {
+          $.ajax({
+            url: "../logout.php",
+            type: "POST",
+            dataType: "json",
+            success: function(response) {
+              if (response.status === "success") {
+                window.location.href = "../index.html";
+              }
+            },
+            error: function(xhr, status, error) {
+              console.error("AJAX Error:", status, error);
+            }
+          });
         });
       });
     </script>
