@@ -169,7 +169,15 @@
             if (res.code == 200) {
               $(".passWord").val("");
               $(".userName").val("");
-              window.location.replace("admin/dashbord.php");
+              if (res.data.role == "admin") {
+                window.location.replace("admin/dashbord.php");
+              }
+              if (res.data.role == "student") {
+                window.location.replace("student/dashbord.php");
+              }
+              if (res.data.role == "teacher") {
+                window.location.replace("teacher/dashbord.php");
+              }
             }
           },
         });

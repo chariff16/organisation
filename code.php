@@ -40,7 +40,8 @@ if (isset($_POST['login'])) {
                 $_SESSION['role'] = $row['role'];
                 $res = [
                     'code' => 200,
-                    'message' => 'كل شيء صحيح'
+                    'message' => 'كل شيء صحيح',
+                    'data' => $row
                 ];
                 echo json_encode($res);
                 return ;
