@@ -126,6 +126,12 @@
           ادارة الحسابات الإدارة
         </a>
         <a
+          href="class.php"
+          class="text-light d-block text-decoration-none py-3 px-4"
+        >
+          قائمة الأقسام
+        </a>
+        <a
           href="post.php"
           class="text-light d-block text-decoration-none py-3 px-4"
         >
