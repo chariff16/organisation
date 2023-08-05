@@ -58,7 +58,7 @@
           <div class="offcanvas-body p-0">
             <a
               href="dashbord.php"
-              class="bg-light d-block text-decoration-none p-3"
+              class="text-light d-block text-decoration-none p-3"
             >
               ادارة الحسابات الطلبة
             </a>
@@ -76,7 +76,7 @@
             </a>
             <a
               href="class.php"
-              class="text-light d-block text-decoration-none py-3 px-4"
+              class="bg-light d-block text-decoration-none py-3 px-4"
             >
               قائمة الأقسام
             </a>
@@ -114,7 +114,7 @@
       <aside class="bg-primary aside-bar d-none d-md-inline">
         <a
           href="dashbord.php"
-          class="bg-light d-block text-decoration-none py-3 px-4"
+          class="text-light d-block text-decoration-none py-3 px-4"
         >
           ادارة الحسابات الطلبة
         </a>
@@ -132,7 +132,7 @@
         </a>
         <a
           href="class.php"
-          class="text-light d-block text-decoration-none py-3 px-4"
+          class="bg-light d-block text-decoration-none py-3 px-4"
         >
           قائمة الأقسام
         </a>
@@ -151,24 +151,23 @@
       </aside>
       <main>
         <div>
-          <h3 class="text-primary text-center mt-3">قائمة الطلبة</h3>
+          <h3 class="text-primary text-center mt-3">قائمة الأقسام</h3>
         </div>
         <div class="mt-3 mx-5">
         <button
             type="button"
             class="btn btn-outline-primary"
             data-bs-toggle="modal"
-            data-bs-target="#addStudentModal"
+            data-bs-target="#addClassModal"
           >
-            إضافة طالب
+            إضافة قسم
         </button>
         <div class="mt-4">
           <table class="table table-hover" id="table">
             <thead>
               <tr>
-                <th scope="col">الاسم</th>
-                <th class="col">اللقب</th>
-                <th class="col">الهاتف</th>
+                <th scope="col">#</th>
+                <th class="col">اسم القسم</th>
                 <th class="col-1">
                   <p class="d-none d-md-block mb-0">تعديل/معاينة/حذف</p>
                   <p class="d-md-none mb-0">فعل</p>
@@ -178,27 +177,26 @@
             <tbody>
               <?php
                 require("../dbcon.php");
-                $sql = "SELECT * FROM `user` WHERE role = 'student'";
+                $sql = "SELECT * FROM `class` ";
                 $run = mysqli_query($con, $sql);
                 while($row = mysqli_fetch_assoc($run)){
               ?>
               <tr>
-                <td class="align-middle"><?php echo $row['fname'] ?></td>
-                <td class="align-middle"><?php echo $row['lname'] ?></td>
-                <td class="align-middle"><?php echo $row['phone'] ?></td>
+                <td class="align-middle"><?php echo $row['id'] ?></td>
+                <td class="align-middle"><?php echo $row['class_name'] ?></td>
                 <td class="d-md-flex d-sm-inline-block justify-content-around">
                   <button
                     type="button"
                     class="btn btn-outline-primary btn-sm editBtn"
                     data-bs-toggle="modal"
-                    data-bs-target="#editStudentModal"
+                    data-bs-target="#editClassModal"
                     value="<?php echo $row['id'] ?>"
                   >
                     <i class="far fa-edit"></i>
                   </button>
                   <a
                     type="button"
-                    href="studentview.php?studentId=<?php echo $row['id'] ?>"
+                    href="classview.php?ClassId=<?php echo $row['id'] ?>"
                     class="btn btn-outline-success btn-sm viewBtn"
                     value="<?php echo $row['id'] ?>"
                   >
@@ -208,7 +206,7 @@
                     type="button"
                     class="btn btn-outline-danger btn-sm deleteBtn"
                     data-bs-toggle="modal"
-                    data-bs-target="#deleteStudentModal"
+                    data-bs-target="#deleteClassModal"
                     value="<?php echo $row['id'] ?>"
                   >
                   <i class="fas fa-trash-alt"></i>
@@ -223,12 +221,12 @@
         </div>
       </main>
       <div class="mOdels">
-          <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="addClassModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">
-                    إضافة طالب
+                    إضافة قسم
                   </h1>
                   <button
                     type="button"
@@ -238,55 +236,33 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <form id="addStudent">
-                    <label class="form-label studentFnameLable">اسم الطالب</label>
+                  <form id="addClass">
+                    <label class="form-label classNameLable">اسم القسم</label>
                     <input
                       type="text"
-                      name="studentFname"
-                      class="form-control studentFname"
+                      name="ClassName"
+                      class="form-control className"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label studentLnameLable">لقب الطالب</label>
-                    <input
-                      type="text"
-                      name="studentLname"
-                      class="form-control studentLname"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label donerPhoneLable">هاتف الطالب</label>
-                    <input
-                      type="text"
-                      name="studentPhone"
-                      class="form-control studentPhone"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label studentClassLable">القسم</label>
-                    <input
-                      type="text"
-                      name="studentClass"
-                      class="form-control studentClass"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label studentUsernameLable">إسم المستخدم للطالب</label>
-                    <input
-                      type="text"
-                      name="studentUsername"
-                      class="form-control studentUsername"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label studentPasswordLable">كلمة السر للطالب</label>
-                    <input
-                      type="password"
-                      name="studentPassword"
-                      class="form-control studentPassword"
-                      aria-labelledby="passwordHelpBlock"
-                    />
+                    <label class="form-label classTeacherNameLable">إسم أستاذ القسم</label>
+                    <select class="form-select classTeacherName" name="teacher_id">
+                      <?php
+                      require("../dbcon.php");
+                      $sql = "SELECT * FROM user WHERE role = 'teacher'";
+                      $result = mysqli_query($con, $sql);
+                      while($row = mysqli_fetch_assoc($result)){
+                      ?>
+                      <option value="<?php echo $row['id']; ?>"><?php echo $row['fname']; ?></option>
+                      <?php
+                      };
+                      ?>
+                    </select>
                     <div class="modal-footer">
                       <input
                         type="submit"
                         name="add"
                         class="btn btn-primary"
-                        value="إضافة طالب"
+                        value="إضافة قسم"
                       />
                     </div>
                   </form>
@@ -294,12 +270,12 @@
               </div>
             </div>
           </div>
-          <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="editClassModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">
-                    تعديل معلومات الطالب
+                    تعديل معلومات القسم
                   </h1>
                   <button
                     type="button"
@@ -309,50 +285,28 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <form id="editStudent">
-                    <input type="text" class="d-none editStudentId" name="editStudentId">
-                    <label class="form-label editStudentFnameLable">اسم الطالب</label>
+                  <form id="editClass">
+                    <input type="text" class="d-none editClassId" name="editClassId">
+                    <label class="form-label editClassNameLable">اسم القسم</label>
                     <input
                       type="text"
-                      name="editStudentFname"
-                      class="form-control editStudentFname"
+                      name="editClassName"
+                      class="form-control editClassName"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label editStudentLnameLable">لقب الطالب</label>
-                    <input
-                      type="text"
-                      name="editStudentLname"
-                      class="form-control editStudentLname"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label editStudentPhoneLable">هاتف الطالب</label>
-                    <input
-                      type="text"
-                      name="editStudentPhone"
-                      class="form-control editStudentPhone"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label editStudentClassLable">القسم</label>
-                    <input
-                      type="text"
-                      name="editStudentClass"
-                      class="form-control editStudentClass"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label editStudentUsernameLable">إسم المستخدم للطالب</label>
-                    <input
-                      type="text"
-                      name="editStudentUsername"
-                      class="form-control editStudentUsername"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label editStudentPasswordLable">كلمة السر للطالب</label>
-                    <input
-                      type="password"
-                      name="editStudentPassword"
-                      class="form-control editStudentPassword"
-                      aria-labelledby="passwordHelpBlock"
-                    />
+                    <label class="form-label editClassTeacherNameLable">إسم أستاذ القسم</label>
+                    <select class="form-select editClassTeacherName" name="editClassTeacherName">
+                      <?php
+                      require("../dbcon.php");
+                      $sql = "SELECT * FROM user WHERE role = 'teacher'";
+                      $result = mysqli_query($con, $sql);
+                      while($row = mysqli_fetch_assoc($result)){
+                      ?>
+                      <option value="<?php echo $row['id']; ?>"><?php echo $row['fname']; ?></option>
+                      <?php
+                      };
+                      ?>
+                    </select>
                     <div class="modal-footer">
                       <input
                         type="submit"
@@ -366,12 +320,12 @@
               </div>
             </div>
           </div>
-          <div class="modal fade" id="deleteStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="deleteClassModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="d-flex justify-content-between p-3 border-bottom border-dark-subtle">
                   <h1 class="modal-title fs-5" id="exampleModalLabel">
-                    حذف طالب
+                    حذف قسم
                   </h1>
                   <button
                     type="button"
@@ -381,11 +335,11 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <input type="text" class="d-none deleteStudentId" >
-                  <p>هل أنت متأكد من حذف هذا الطالب</p>
+                  <input type="text" class="d-none deleteClassId" >
+                  <p>هل أنت متأكد من حذف هذا القسم</p>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" id="deleteStudent">
+                  <button type="button" class="btn btn-danger" id="deleteClass">
                     حذف
                   </button>
                 </div>
@@ -398,11 +352,11 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script>
-      $(document).on("submit", "#addStudent", function (e) {
+      $(document).on("submit", "#addClass", function (e) {
         $(".form-control").removeClass("border-danger");
         e.preventDefault();
         var formData = new FormData(this);
-        formData.append("addStudent", true);
+        formData.append("addClass", true);
         $.ajax({
           type: "POST",
           url: "code.php",
@@ -412,73 +366,52 @@
           success: function (response) {
             let res = jQuery.parseJSON(response);
             if (res.code == 1) {
-              if (res.errors.fname) {
-                $(".studentFname").addClass("border-danger");
-                $(".studentFnameLable").addClass("text-danger");
-              }
-              if (res.errors.lname) {
-                $(".studentLname").addClass("border-danger");
-                $(".studentLnameLable").addClass("text-danger");
-              }
-              if (res.errors.phone) {
-                $(".studentPhone").addClass("border-danger");
-                $(".studentPhoneLable").addClass("text-danger");
-              }
-              if (res.errors.username) {
-                $(".studentUsername").addClass("border-danger");
-                $(".studentUsernameLable").addClass("text-danger");
-              }
-              if (res.errors.password) {
-                $(".studentPassword").addClass("border-danger");
-                $(".studentPasswordLable").addClass("text-danger");
-              }
               if (res.errors.class) {
-                $(".studentClass").addClass("border-danger");
-                $(".studentClassLable").addClass("text-danger");
+                $(".className").addClass("border-danger");
+                $(".classNameLable").addClass("text-danger");
               }
-            }
-            if (res.code == 2) {
-              $(".studentUsername").addClass("border-danger");
-              $(".studentUsernameLable").text(res.message);
-              $(".studentUsernameLable").addClass("text-danger");
+              if (res.errors.teacher) {
+                $(".classTeacherName").addClass("border-danger");
+                $(".classTeacherNameLable").addClass("text-danger");
+              }
             }
             if (res.code == 200) {
-              $('#addStudentModal').modal('hide');                 
-              $('#addStudent')[0].reset();
+              $('#addClassModal').modal('hide');                 
+              $('#addClass')[0].reset();
               $('#table').load(location.href + " #table");
               alertify.success(res.message); 
+            }
+            if (res.code == 500) {
+              alert(res.message);
             }
           },
         });
       });
       $(document).on('click', '.editBtn', function () {
         let id = $(this).val();
-        let editId = $('.editStudentId').val(id);
+        let editId = $('.editClassId').val(id);
         $.ajax({
             type: "GET",
-            url: "code.php?edit_student_id=" + id,
+            url: "code.php?edit_class_id=" + id,
             success: function (response) {
                 var res = jQuery.parseJSON(response);
                 if(res.code == 404) {
                   alert(res.message);
                 }else if(res.code == 200){
 
-                    $('.editStudentLname').val(res.data.lname);
-                    $('.editStudentFname').val(res.data.fname);
-                    $('.editStudentPhone').val(res.data.phone);
-                    $('.editStudentClass').val(res.data.group);
-                    $('.editStudentUsername').val(res.data.username);
+                    $('.editClassName').val(res.data.class_name);
+                    $('.editClassTeacherName').val(res.data.teacher_id);
 
-                    $('#editPostModal').modal('show');
+                    $('#editClassModal').modal('show');
                 }
             }
         });
       });
-      $(document).on("submit", "#editStudent", function (e) {
+      $(document).on("submit", "#editClass", function (e) {
         $(".form-control").removeClass("border-danger");
         e.preventDefault();
         var formData = new FormData(this);
-        formData.append("editStudent", true);
+        formData.append("editClass", true);
         $.ajax({
           type: "POST",
           url: "code.php",
@@ -488,34 +421,22 @@
           success: function (response) {
             let res = jQuery.parseJSON(response);
             if (res.code == 1) {
-              if (res.errors.lname) {
-                $(".editStudentLname").addClass("border-danger");
-                $(".editStudentLnameLable").addClass("text-danger");
-              }
-              if (res.errors.fname) {
-                $(".editStudentFname").addClass("border-danger");
-                $(".editStudentFnameLable").addClass("text-danger");
-              }
-              if (res.errors.phone) {
-                $(".editStudentPhone").addClass("border-danger");
-                $(".editStudentPhoneLable").addClass("text-danger");
-              }
-              if (res.errors.username) {
-                $(".editStudentUsername").addClass("border-danger");
-                $(".editStudentUsernameLable").addClass("text-danger");
-              }
               if (res.errors.class) {
-                $(".editStudentClass").addClass("border-danger");
-                $(".editStudentClassLable").addClass("text-danger");
+                $(".editClassName").addClass("border-danger");
+                $(".editClassNameLable").addClass("text-danger");
+              }
+              if (res.errors.teacher) {
+                $(".editClassTeacherName").addClass("border-danger");
+                $(".editClassTeacherNameLable").addClass("text-danger");
               }
             }
             if (res.code == 200) {
-              $('#editStudentModal').modal('hide');
-              $('#editStudent')[0].reset();
+              $('#editClassModal').modal('hide');
+              $('#editClass')[0].reset();
               $('#table').load(location.href + " #table");
               alertify.success(res.message); 
             }
-            if(res.code == 404) {
+            if(res.code == 500) {
               alert(res.message);
             }
           },
@@ -523,21 +444,21 @@
       });
       $(document).on('click', '.deleteBtn', function () {
         let id = $(this).val();
-        let deleteInput = $('.deleteStudentId').val(id);
+        let deleteInput = $('.deleteClassId').val(id);
       });
-      $(document).on("click", "#deleteStudent", function (e) {
+      $(document).on("click", "#deleteClass", function (e) {
         $(".form-control").removeClass("border-danger");
         e.preventDefault();
-        let id = $('.deleteStudentId').val();
+        let id = $('.deleteClassId').val();
         $.ajax({
             type: "GET",
-            url: "code.php?deleteStudent=" + id,
+            url: "code.php?deleteClass=" + id,
             success: function (response) {
                 var res = jQuery.parseJSON(response);
                 if(res.code == 404) {
                   alert(res.message);
                 }else if(res.code == 200){
-                    $('#deleteStudentModal').modal('hide');
+                    $('#deleteClassModal').modal('hide');
                     $('#table').load(location.href + " #table");
                     alertify.success(res.message); 
                 }

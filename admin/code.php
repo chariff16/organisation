@@ -1054,3 +1054,125 @@
             return ;
         }
     };
+    if (isset($_POST['addClass'])) {
+        require('../dbcon.php');
+        $class = mysqli_real_escape_string($con, $_POST['ClassName']);
+        $teacher_id = mysqli_real_escape_string($con, $_POST['teacher_id']);
+        $errors = array();
+        if ($teacher_id == NULL || $class == NULL ) {
+            if ($class == NULL) {
+                $errors['class'] = 'Field 1 is required';
+            }
+            if ($teacher_id == NULL) {
+                $errors['teacher'] = 'Field 2 is required';
+            }
+            $res = [
+                'code' => 1,
+                'message' => 'يرجى إدخال جميع المعلومات',
+                'errors' => $errors
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $sql = "INSERT INTO `class`(`id`, `class_name`, `teacher_id`) VALUES (NULL,'$class','$teacher_id')";
+            $run = mysqli_query($con, $sql);
+            if ($run) {
+                $res = [
+                    'code' => 200,
+                    'message' => 'تمت إضافة القسم'
+                ];
+                echo json_encode($res);
+                return ;
+            }else {
+                $res = [
+                    'code' => 500,
+                    'message' => 'يجرى الاتصال بمطور الموقع'
+                ];
+                echo json_encode($res);
+                return ;
+            }
+            
+        }
+    };
+    if (isset($_GET['edit_class_id'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_GET['edit_class_id']);
+        $sql = "SELECT * FROM `class` WHERE id = '$id'";
+        $run = mysqli_query($con, $sql);
+        if ($row = mysqli_fetch_assoc($run)) {
+            $res = [
+                'code' => 200,
+                'message' => 'تمت إضافة عضو',
+                'data' => $row
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $res = [
+                'code' => 404,
+                'message' => 'يرجى الإتصال بمطور الموقع'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    };
+    if (isset($_POST['editClass'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_POST['editClassId']);
+        $class = mysqli_real_escape_string($con, $_POST['editClassName']);
+        $teacher_id = mysqli_real_escape_string($con, $_POST['editClassTeacherName']);
+        $errors = array();
+        if ($teacher_id == NULL || $class == NULL ) {
+            if ($class == NULL) {
+                $errors['class'] = 'Field 1 is required';
+            }
+            if ($teacher_id == NULL) {
+                $errors['teacher'] = 'Field 2 is required';
+            }
+            $res = [
+                'code' => 1,
+                'message' => 'يرجى إدخال جميع المعلومات',
+                'errors' => $errors 
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $sql = "UPDATE `class` SET `class_name`='$class',`teacher_id`='$teacher_id' WHERE id = '$id'";
+            $run = mysqli_query($con, $sql);
+            if ($run) {
+                $res = [
+                    'code' => 200,
+                    'message' => 'تم تحديث المعلومات'
+                ];
+                echo json_encode($res);
+            }else {
+                $res = [
+                    'code' => 500,
+                    'message' => 'يرجى الإتصال بالمطور'
+                ];
+                echo json_encode($res);
+            }
+        }
+    };
+    if (isset($_GET['deleteClass'])) {
+        require('../dbcon.php');
+        $id = mysqli_real_escape_string($con, $_GET['deleteClass']);
+        $sql = "DELETE FROM `class` WHERE id = '$id'";
+        $run = mysqli_query($con, $sql);
+        if ($run) {
+            $res = [
+                'code' => 200,
+                'message' => 'تمت حذف الأستاذ',
+                'data' => $row
+            ];
+            echo json_encode($res);
+            return ;
+        }else {
+            $res = [
+                'code' => 404,
+                'message' => 'يرجى الإتصال بمطور الموقع'
+            ];
+            echo json_encode($res);
+            return ;
+        }
+    };
