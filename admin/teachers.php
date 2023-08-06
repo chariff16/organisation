@@ -256,13 +256,6 @@
                       class="form-control teacherPhone"
                       aria-labelledby="passwordHelpBlock"
                     />
-                    <label class="form-label teacherClassLable">القسم</label>
-                    <input
-                      type="text"
-                      name="teacherClass"
-                      class="form-control teacherClass"
-                      aria-labelledby="passwordHelpBlock"
-                    />
                     <label class="form-label teacherUsernameLable">إسم المستخدم الأستاذ</label>
                     <input
                       type="text"
@@ -326,13 +319,6 @@
                       type="text"
                       name="editTeacherPhone"
                       class="form-control editTeacherPhone"
-                      aria-labelledby="passwordHelpBlock"
-                    />
-                    <label class="form-label editTeacherClassLable">القسم</label>
-                    <input
-                      type="text"
-                      name="editTeacherClass"
-                      class="form-control editTeacherClass"
                       aria-labelledby="passwordHelpBlock"
                     />
                     <label class="form-label editTeacherUsernameLable">إسم المستخدم الأستاذ</label>
@@ -473,10 +459,6 @@
                 $(".teacherPassword").addClass("border-danger");
                 $(".teacherPasswordLable").addClass("text-danger");
               }
-              if (res.errors.class) {
-                $(".teacherClass").addClass("border-danger");
-                $(".teacherClassLable").addClass("text-danger");
-              }
               if (res.errors.phone) {
                 $(".teacherPhone").addClass("border-danger");
                 $(".teacherPhoneLable").addClass("text-danger");
@@ -508,11 +490,10 @@
                 if(res.code == 404) {
                   alert(res.message);
                 }else if(res.code == 200){
-                    $('.teacherFname').val(res.data.fname);
-                    $('.teacherLname').val(res.data.lname);
-                    $('.teacherUsername').val(res.data.username);
-                    $('.teacherClass').val(res.data.group);
-                    $('.teacherPhone').val(res.data.phone);
+                    $('.editTeacherFname').val(res.data.fname);
+                    $('.editTeacherLname').val(res.data.lname);
+                    $('.editTeacherUsername').val(res.data.username);
+                    $('.editTeacherPhone').val(res.data.phone);
                     $('#editPostModal').modal('show');
                 }
             }

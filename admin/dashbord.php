@@ -261,12 +261,18 @@
                       aria-labelledby="passwordHelpBlock"
                     />
                     <label class="form-label studentClassLable">القسم</label>
-                    <input
-                      type="text"
-                      name="studentClass"
-                      class="form-control studentClass"
-                      aria-labelledby="passwordHelpBlock"
-                    />
+                    <select class="form-select classTeacherName" name="studentClass">
+                      <?php
+                      require("../dbcon.php");
+                      $sql = "SELECT * FROM class ";
+                      $result = mysqli_query($con, $sql);
+                      while($row = mysqli_fetch_assoc($result)){
+                      ?>
+                      <option value="<?php echo $row['id']; ?>"><?php echo $row['class_name']; ?></option>
+                      <?php
+                      };
+                      ?>
+                    </select>
                     <label class="form-label studentUsernameLable">إسم المستخدم للطالب</label>
                     <input
                       type="text"
@@ -333,12 +339,18 @@
                       aria-labelledby="passwordHelpBlock"
                     />
                     <label class="form-label editStudentClassLable">القسم</label>
-                    <input
-                      type="text"
-                      name="editStudentClass"
-                      class="form-control editStudentClass"
-                      aria-labelledby="passwordHelpBlock"
-                    />
+                    <select class="form-select editStudentClass" name="editStudentClass">
+                      <?php
+                      require("../dbcon.php");
+                      $sql = "SELECT * FROM class ";
+                      $result = mysqli_query($con, $sql);
+                      while($row = mysqli_fetch_assoc($result)){
+                      ?>
+                      <option value="<?php echo $row['id']; ?>"><?php echo $row['class_name']; ?></option>
+                      <?php
+                      };
+                      ?>
+                    </select>
                     <label class="form-label editStudentUsernameLable">إسم المستخدم للطالب</label>
                     <input
                       type="text"

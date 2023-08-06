@@ -881,9 +881,8 @@
         $username = mysqli_real_escape_string($con, $_POST['teacherUsername']);
         $password = mysqli_real_escape_string($con, $_POST['teacherPassword']);
         $phone = mysqli_real_escape_string($con, $_POST['teacherPhone']);
-        $class = mysqli_real_escape_string($con, $_POST['teacherClass']);
         $errors = array();
-        if ($fname == NULL || $lname == NULL || $username == NULL || $password == NULL ||$phone == NULL || $class == NULL ) {
+        if ($fname == NULL || $lname == NULL || $username == NULL || $password == NULL ||$phone == NULL ) {
             if ($fname == NULL) {
                 $errors['fname'] = 'Field 1 is required';
             }
@@ -898,9 +897,6 @@
             }
             if ($phone == NULL) {
                 $errors['phone'] = 'Field 5 is required';
-            }
-            if ($class == NULL) {
-                $errors['class'] = 'Field 6 is required';
             }
             $res = [
                 'code' => 1,
@@ -921,7 +917,7 @@
                 return ;
             }else {
                 $hpassword = password_hash($password, PASSWORD_DEFAULT);
-                $sql = "INSERT INTO `user`(`id`, `username`, `fname`, `lname`, `phone`, `password`, `role`, `group`) VALUES (NULL ,'$username','$fname','$lname','$phone','$hpassword','teacher','$class')";
+                $sql = "INSERT INTO `user`(`id`, `username`, `fname`, `lname`, `phone`, `password`, `role`, `group`) VALUES (NULL ,'$username','$fname','$lname','$phone','$hpassword','teacher',NULL)";
                 $run = mysqli_query($con, $sql);
                 $res = [
                     'code' => 200,
@@ -962,9 +958,8 @@
         $username = mysqli_real_escape_string($con, $_POST['editTeacherUsername']);
         $password = mysqli_real_escape_string($con, $_POST['editTeacherPassword']);
         $phone = mysqli_real_escape_string($con, $_POST['editTeacherPhone']);
-        $class = mysqli_real_escape_string($con, $_POST['editTeacherClass']);
         $errors = array();
-        if ($fname == NULL || $lname == NULL || $username == NULL || $phone == NULL || $class == NULL) {
+        if ($fname == NULL || $lname == NULL || $username == NULL || $phone == NULL ) {
             if ($fname == NULL) {
                 $errors['fname'] = 'Field 1 is required';
             }
@@ -977,9 +972,6 @@
             if ($phone == NULL) {
                 $errors['phone'] = 'Field 4 is required';
             }
-            if ($class == NULL) {
-                $errors['class'] = 'Field 5 is required';
-            }
             $res = [
                 'code' => 1,
                 'message' => 'يرجى إدخال جميع المعلومات',
@@ -988,7 +980,7 @@
             echo json_encode($res);
             return ;
         }else if ($password == NULL) {
-            $sql = "UPDATE `user` SET `username`='$username',`fname`='$fname',`lname`='$lname',`phone`='$phone',`role`='teacher',`group`='$class' WHERE id = '$id'";
+            $sql = "UPDATE `user` SET `username`='$username',`fname`='$fname',`lname`='$lname',`phone`='$phone',`role`='teacher' WHERE id = '$id'";
             $run = mysqli_query($con, $sql);
             if ($run) {
                 $res = [
@@ -999,7 +991,7 @@
             }
         }else {
             $hpassword = password_hash($password, PASSWORD_DEFAULT);
-            $sql = "UPDATE `user` SET `username`='$username',`fname`='$fname',`lname`='$lname',`phone`='$phone',`password`='$hpassword',`role`='teacher',`group`='$class' WHERE id = '$id'";
+            $sql = "UPDATE `user` SET `username`='$username',`fname`='$fname',`lname`='$lname',`phone`='$phone',`password`='$hpassword',`role`='teacher' WHERE id = '$id'";
             $run = mysqli_query($con, $sql);
             if ($run) {
                 $res = [
