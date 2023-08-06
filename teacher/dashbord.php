@@ -127,7 +127,7 @@
             <tbody>
               <?php
                 require("../dbcon.php");
-                $sql = "SELECT u.fname, u.lname, u.phone
+                $sql = "SELECT u.fname, u.lname, u.phone, u.id
                 FROM user u
                 JOIN class c ON u.group = c.id
                 WHERE c.teacher_id = $id AND u.role = 'student';
@@ -142,7 +142,7 @@
                 <td class="d-md-flex d-sm-inline-block justify-content-around">
                   <a
                     type="button"
-                    href="studentview.php?studentId=<?php echo $row['id'] ?>"
+                    href="studentview.php?studentid=<?php echo $row['id'] ?>"
                     class="btn btn-outline-success btn-sm viewBtn align-middle"
                     value="<?php echo $row['id'] ?>"
                   >
