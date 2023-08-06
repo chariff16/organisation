@@ -283,7 +283,7 @@
                 </div>
                 <div class="modal-body">
                   <form id="editExam">
-                    <input type="text" class="d-none editFundId" name="editExamId">
+                    <input type="text" class="d-none editExamId" name="editExamId">
                     <label class="form-label editClassLable">المادة</label>
                     <input
                       type="text"
@@ -381,6 +381,7 @@
       $(document).on('click', '.editBtn', function () {
         let id = $(this).val();
         let editId = $('.editExamId').val(id);
+        console.log($('.editExamId').val());
         $.ajax({
             type: "GET",
             url: "code.php?edit_exam_id=" + id,

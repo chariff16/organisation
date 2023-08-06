@@ -481,7 +481,6 @@
       $(document).on('click', '.editBtn', function () {
         let teacher_id = $(this).val();
         let editId = $('.editId').val(teacher_id);
-        console.log(editId.val());
         $.ajax({
             type: "GET",
             url: "code.php?edit_teacher_id=" + teacher_id,
