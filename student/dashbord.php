@@ -124,7 +124,7 @@
             <tbody>
               <?php
                 require("../dbcon.php");
-                $sql = "SELECT * FROM `exam` WHERE studentid = '$id'";
+                $sql = "SELECT * FROM `exam` WHERE studentid = '$id' ORDER BY `exam`.`date` DESC; ";
                 $run = mysqli_query($con, $sql);
                 while($row = mysqli_fetch_assoc($run)){
               ?>
