@@ -1,3 +1,12 @@
+<?php
+  session_start();
+  $role = $_SESSION['role'];
+  if ($role == 'admin') {
+    $id = $_SESSION['id'];  
+  }else {
+    header("location: ../index.html");
+  }
+?>
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
   <head>

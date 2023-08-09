@@ -1,8 +1,11 @@
 <?php
   session_start();
-  $id = $_SESSION['id'];
   $role = $_SESSION['role'];
-  $class = $_SESSION['group'];
+  if ($role == 'student') {
+    $id = $_SESSION['id'];  
+  }else {
+    header("location: ../index.html");
+  }
 ?>
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
